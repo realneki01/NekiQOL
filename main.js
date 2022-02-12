@@ -1,7 +1,7 @@
 /// <reference types="../CTAutocomplete" />
 /// <reference lib="es2015" />
 import SettingsNew from "./config";
-import request from "requestV2/index";
+import request from "requestV2";
 
 // Java libraries, ignore these
 const ActionListener = Java.type("java.awt.event.ActionListener");
@@ -55,8 +55,6 @@ function postWebhook(url,data){
         throw new Error("Fool.")
     });
 }
-
-let testMSG = `${SettingsNew.MAIN_WEBHOOK_DISCORD_ID ? `<@${SettingsNew.MAIN_WEBHOOK_DISCORD_ID}> Test Message!` : `Test message but no ping!`}`
 
 // Island checks
 const isInHub = () => {
