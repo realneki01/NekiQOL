@@ -31,28 +31,27 @@ var smacro = false;
 var lastTurnAround = new Date();
 let isReconnecting = false
 let randomshit = false
-const CobbleMacroBind = new KeyBind("Toggle Cobble macro", Keyboard.KEY_NONE, ".Macros")
-const SMacroBind = new KeyBind("Toggle S Farm macro", Keyboard.KEY_NONE, ".Macros")
-const CaneMacrokeyBind = new KeyBind("Toggle Cane macro", Keyboard.KEY_NONE, ".Macros")
+const CobbleMacroBind = new KeyBind("Toggle Cobble macro", Keyboard.KEY_NONE, "NekoQOL")
+const SMacroBind = new KeyBind("Toggle S Farm macro", Keyboard.KEY_NONE, "NekoQOL")
+const CaneMacrokeyBind = new KeyBind("Toggle Cane macro", Keyboard.KEY_NONE, "NekoQOL")
 const sendClickBlockToController = Client.getMinecraft().getClass().getDeclaredMethod("func_147115_a", java.lang.Boolean.TYPE);
 sendClickBlockToController.setAccessible(true);
 const webhookURL = SettingsNew.MAIN_WEBHOOK_URL
 
 
 function postWebhook(url,data){
-    if (!url) return;
     request({
         url: url,
-        method: "POST",
+        method: 'POST',
         headers: {
             'Content-type': 'application/json',
-            'User-agent':'Mozilla/5.0'
+            "User-Agent":"Mozilla/5.0"
         },
         body: {
-            content: data
+            username: "NekoQOL Alerts",
+            content: `${data}`,
+            avatar_url: "https://cdn.discordapp.com/attachments/941853201941016666/942204435701047326/loli61_2.png"
         }
-    }).catch(() => {
-        throw new Error("Fool.")
     });
 }
 
@@ -115,8 +114,8 @@ register('command', () => {
 }).setName("guichat");
 
 register(`command`, (...args) => {
-    ChatLib.chat(`ARGS == ${args}`)
-    if(args[0]){
+    ChatLib.chat(`${args}`)
+    if(args == ""){
         ChatLib.chat(ChatLib.getChatBreak(`&b====================================================`))
         ChatLib.chat(ChatLib.getCenteredText(`&b&lNeko&7&lQOL`))
         ChatLib.chat(ChatLib.getCenteredText(`&7Module Developed by &bAzael&7 & &bSemiMute`))
