@@ -1,5 +1,8 @@
 /// <reference types="../CTAutocomplete" />
 /// <reference lib="es2015" />
+import SettingsNew from "./config";
+import request from "requestV2/index";
+
 // Java libraries, ignore these
 const ActionListener = Java.type("java.awt.event.ActionListener");
 const JFrame = Java.type("javax.swing.JFrame");
@@ -31,9 +34,29 @@ let randomshit = false
 const CobbleMacroBind = new KeyBind("Toggle Cobble macro", Keyboard.KEY_NONE, ".Macros")
 const SMacroBind = new KeyBind("Toggle S Farm macro", Keyboard.KEY_NONE, ".Macros")
 const CaneMacrokeyBind = new KeyBind("Toggle Cane macro", Keyboard.KEY_NONE, ".Macros")
-const TestBind = new KeyBind("Test", Keyboard.KEY_NONE, ".Macros")
 const sendClickBlockToController = Client.getMinecraft().getClass().getDeclaredMethod("func_147115_a", java.lang.Boolean.TYPE);
 sendClickBlockToController.setAccessible(true);
+const webhookURL = SettingsNew.MAIN_WEBHOOK_URL
+
+
+function postWebhook(url,data){
+    if (!url) return;
+    request({
+        url: url,
+        method: "POST",
+        headers: {
+            'Content-type': 'application/json',
+            'User-agent':'Mozilla/5.0'
+        },
+        body: {
+            content: data
+        }
+    }).catch(() => {
+        throw new Error("Fool.")
+    });
+}
+
+let testMSG = `${SettingsNew.MAIN_WEBHOOK_DISCORD_ID ? `<@${SettingsNew.MAIN_WEBHOOK_DISCORD_ID}> Test Message!` : `Test message but no ping!`}`
 
 // Island checks
 const isInHub = () => {
@@ -92,6 +115,23 @@ register('command', () => {
         j.setAlwaysOnTop(true);
     }, 500);
 }).setName("guichat");
+
+register(`command`, (...args) => {
+    ChatLib.chat(`ARGS == ${args}`)
+    if(args[0]){
+        ChatLib.chat(ChatLib.getChatBreak(`&b====================================================`))
+        ChatLib.chat(ChatLib.getCenteredText(`&b&lNeko&7&lQOL`))
+        ChatLib.chat(ChatLib.getCenteredText(`&7Module Developed by &bAzael&7 & &bSemiMute`))
+        ChatLib.chat(`&c`)
+        ChatLib.chat(`&7- &b/nekoqol config &9- &7&oNyopens nye config mewnnu to set nyany nekoqol setting`)
+        ChatLib.chat(`&c`)
+        ChatLib.chat(ChatLib.getChatBreak(`&b====================================================`))
+    }
+    if(args == "config"){
+        SettingsNew.openGUI()
+    }
+}).setName(`nekoqol`)
+
 
 register("tick", () => {
     lastY = getBlock
@@ -157,9 +197,6 @@ register("tick", () => {
             forwardBind.setState(false)
         }
     }
-    if (TestBind.isKeyDown()) {
-        ChatLib.chat(Math.floor(Player.getPlayer().field_70177_z));
-    }
     // S Macro toggle
     if (SMacroBind.isPressed()) {
         if (smacro == false) {
@@ -167,6 +204,7 @@ register("tick", () => {
             ChatLib.chat("§c[Aza's Macro] §aS Farm Macro Toggled On! OwO")
             click = true
             rightBind.setState(true)
+            forwardBind.setState(true)
         }
         else if (smacro == true) {
             smacro = false
@@ -174,6 +212,7 @@ register("tick", () => {
             click = false
             rightBind.setState(false)
             leftBind.setState(false)
+            forwardBind.setState(false)
         }
     }
 
@@ -185,10 +224,16 @@ register("tick", () => {
             if (rightBind.isKeyDown()) {
                 rightBind.setState(false);
                 leftBind.setState(true);
+                setTimeout(() => {
+                    ChatLib.say(`/sethome`)
+                }, 1000);
             }
             else if (leftBind.isKeyDown()) {
                 leftBind.setState(false);
                 rightBind.setState(true);
+                setTimeout(() => {
+                    ChatLib.say(`/sethome`)
+                }, 1000);
             }
         }
         if (new Date().getTime() - lastTurnAround.getTime() > 60000) {
@@ -203,7 +248,7 @@ register("tick", () => {
             }
         }
         if (isReconnecting == false && randomshit == true) {
-
+            Player.getPlayer().field_70177_z = 90
             click = true
             sneakBind.setState(false)
             leftBind.setState(false);
@@ -232,7 +277,7 @@ register("tick", () => {
         }
     }
     // Cane macro settings, change the getBlockZ == "num" to whatever coordinates that are in the cane farm's edges (the outside barrier coordinates)
-    // If your cane farm is oriented in X direction, might need to edit this a bit, if you can't figure it out dm me 
+    // If your cane farm is oriented in X direction, might need to edit this a bit, if you can't figure it out dm me on discord @Azael#0315
     if (getBlockZ == "80" && cane) {
         if (new Date().getTime() - lastTurnAround.getTime() < 1000) return;
         lastTurnAround = new Date();
@@ -240,7 +285,7 @@ register("tick", () => {
         rightBind.setState(false)
         leftBind.setState(true)
     }
-    if (getBlockZ == "-79" && cane) {
+    if (getBlockZ == "-83" && cane) {
         if (new Date().getTime() - lastTurnAround.getTime() < 1000) return;
         lastTurnAround = new Date();
         backwardBind.setState(true)
