@@ -29,7 +29,7 @@ register("tick", () => {
     const item = Player.getHeldItem();
     getBlockZ = Math.round(Player.getZ())
     getBlockX = Math.round(Player.getX())
-        // This is to turn off all defined macros, if you add any macro on your own add it to here, so it turns off in case you open a menu
+    // This is to turn off all defined macros, if you add any macro on your own add it to here, so it turns off in case you open a menu
 
     if (Client.currentGui.get() !== null) {
         if (cobble) {
@@ -82,7 +82,8 @@ register("tick", () => {
             ChatLib.chat("§c[Aza's Macro] §aCobble Macro Toggled On! OwO")
             click = true
             forwardBind.setState(true)
-        } else if (cobble == true) {
+        }
+        else if (cobble == true) {
             cobble = false
             ChatLib.chat("§c[Aza's Macro] §4Cobble Macro Toggled Off! OwO")
             click = false
@@ -94,10 +95,13 @@ register("tick", () => {
         if (smacro == false) {
             smacro = true
             ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
+            Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
+            Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
             click = true
             rightBind.setState(true)
             forwardBind.setState(true)
-        } else if (smacro == true) {
+        }
+        else if (smacro == true) {
             smacro = false
             ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &c&lOFF&f!`)
             click = false
@@ -118,7 +122,8 @@ register("tick", () => {
                 setTimeout(() => {
                     ChatLib.say(`/sethome`)
                 }, 1000);
-            } else if (leftBind.isKeyDown()) {
+            }
+            else if (leftBind.isKeyDown()) {
                 leftBind.setState(false);
                 rightBind.setState(true);
                 setTimeout(() => {
@@ -131,17 +136,19 @@ register("tick", () => {
             if (rightBind.isKeyDown()) {
                 rightBind.setState(false);
                 leftBind.setState(true);
-            } else if (leftBind.isKeyDown()) {
+            }
+            else if (leftBind.isKeyDown()) {
                 leftBind.setState(false);
                 rightBind.setState(true);
             }
         }
         if (isReconnecting == false && randomshit == true) {
-            Player.getPlayer().field_70177_z = 90
             click = true
             sneakBind.setState(false)
             leftBind.setState(false);
             rightBind.setState(true);
+            Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90.0
+            Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
             randomshit = false
         }
     }
@@ -154,7 +161,8 @@ register("tick", () => {
             cane = true
             ChatLib.chat(`${prefix} &aCane Macro&f has been toggled &a&lON&f!`)
             click = true
-        } else if (cane == true) {
+        }
+        else if (cane == true) {
             cane = false
             ChatLib.chat(`${prefix} &aCane Macro&f has been toggled &c&lOFF&f!`)
             click = false
@@ -182,6 +190,8 @@ register("tick", () => {
         }
         leftBind.setState(false)
     }
+
+
 })
 
 
