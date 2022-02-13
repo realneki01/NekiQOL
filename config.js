@@ -22,17 +22,17 @@ class Settings {
 
     @SwitchProperty({
         name: "S Shaped Macro Auto",
-        description: "Is this macro going to activate when you connect to the server",
+        description: "Is this macro going to activate when you connect to the server\n&cTurn this setting off if you are playing normally!",
         category: "S Shaped Macro",
     })
-    MAIN_S_FARM_AUTO_ON = false;
+    S_FARM_AUTO_ON = false;
 
     @SwitchProperty({
         name: "Cane Macro Auto",
         description: "Is this macro going to activate when you connect to the server",
         category: "Cane Macro",
     })
-    MAIN_CANE_FARM_AUTO_ON = false;
+    CANE_FARM_AUTO_ON = false;
 
     @TextProperty({
         name: "Webhook URL",
@@ -89,8 +89,8 @@ class Settings {
     // S SHAPED MACRO SETTINGS
 
     @SwitchProperty({
-        name: "Hold W Key",
-        description: "Should your macro hold W whilst farming?",
+        name: "Hold W",
+        description: "Doing Something",
         category: "S Shaped Macro",
     })
 

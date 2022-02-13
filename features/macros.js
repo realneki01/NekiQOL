@@ -5,6 +5,8 @@ const SMacroBind = new KeyBind("Toggle S Farm macro", Keyboard.KEY_NONE, "NekoQO
 const CaneMacrokeyBind = new KeyBind("Toggle Cane macro", Keyboard.KEY_NONE, "NekoQOL")
 const sendClickBlockToController = Client.getMinecraft().getClass().getDeclaredMethod("func_147115_a", java.lang.Boolean.TYPE);
 sendClickBlockToController.setAccessible(true);
+
+
 let prefix = "&8[&b&lNeko&7&lQOL&8]"
     // Specified keybinds, pretty self explanitory
 const mc = Client.getMinecraft();
@@ -127,6 +129,9 @@ register("tick", () => {
             ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
             Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
             Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
+            if(SettingsNew.S_SHAPED_HOLD_W){
+                forwardBind.setState(true)
+            }
             click = true
             rightBind.setState(true)
             forwardBind.setState(true)
@@ -254,7 +259,7 @@ const isInLimbo = () => {
     return false;
 }
 register('worldLoad', () => {
-    if (smacro == false) return;
+    if (smacro == false && !SettingsNew.S_FARM_AUTO_ON) return;
     smacro = false
     click = false
     rightBind.setState(false)

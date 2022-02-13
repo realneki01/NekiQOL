@@ -2,7 +2,6 @@
 /// <reference lib="es2015" />
 require("./features/macros.js")
 import SettingsNew from "./config";
-import request from "requestV2";
 
 // Java libraries, ignore these
 const ActionListener = Java.type("java.awt.event.ActionListener");
