@@ -31,6 +31,8 @@ var smacro = false;
 var lastTurnAround = new Date();
 let isReconnecting = false
 let randomshit = false
+
+let prefix = "&8[&b&lNeko&7&lQOL&8]"
 const CobbleMacroBind = new KeyBind("Toggle Cobble macro", Keyboard.KEY_NONE, "NekoQOL")
 const SMacroBind = new KeyBind("Toggle S Farm macro", Keyboard.KEY_NONE, "NekoQOL")
 const CaneMacrokeyBind = new KeyBind("Toggle Cane macro", Keyboard.KEY_NONE, "NekoQOL")
@@ -131,7 +133,7 @@ register(`command`, (...args) => {
     if(args == "sendmsg"){
         postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `${msg}`)
     }
-    if(args == null){
+    if(args == ""){
         ChatLib.chat(ChatLib.getChatBreak(`&b====================================================`))
         ChatLib.chat(ChatLib.getCenteredText(`&b&lNeko&7&lQOL`))
         ChatLib.chat(ChatLib.getCenteredText(`&7Module Developed by &bAzael&7 & &bSemiMute`))
@@ -214,14 +216,14 @@ register("tick", () => {
     if (SMacroBind.isPressed()) {
         if (smacro == false) {
             smacro = true
-            ChatLib.chat("§c[Aza's Macro] §aS Farm Macro Toggled On! OwO")
+            ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
             click = true
             rightBind.setState(true)
             forwardBind.setState(true)
         }
         else if (smacro == true) {
             smacro = false
-            ChatLib.chat("§c[Aza's Macro] §4S Farm Macro Toggled Off! OwO")
+            ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &c&lOFF&f!`)
             click = false
             rightBind.setState(false)
             leftBind.setState(false)
@@ -276,12 +278,12 @@ register("tick", () => {
     if (CaneMacrokeyBind.isPressed()) {
         if (cane == false) {
             cane = true
-            ChatLib.chat("§c[Aza's Macro] §aCane Macro Toggled On! OwO")
+            ChatLib.chat(`${prefix} &aCane Macro&f has been toggled &a&lON&f!`)
             click = true
         }
         else if (cane == true) {
             cane = false
-            ChatLib.chat("§c[Aza's Macro] §4Cane Macro Toggled Off! OwO")
+            ChatLib.chat(`${prefix} &aCane Macro&f has been toggled &c&lOFF&f!`)
             click = false
             rightBind.setState(false)
             leftBind.setState(false)
