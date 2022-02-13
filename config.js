@@ -37,7 +37,7 @@ class Settings {
         subcategory: "Discord Related"
     })
 
-    MAIN_WEBHOOK_URL = " "
+    MAIN_WEBHOOK_URL = ""
 
     @TextProperty({
         name: "Discord User ID",
@@ -46,7 +46,7 @@ class Settings {
         subcategory: "Discord Related"
     })
 
-    MAIN_WEBHOOK_DISCORD_ID = " "
+    MAIN_WEBHOOK_DISCORD_ID = ""
 
     @SwitchProperty({
         name: "Pong the webhook",
@@ -71,14 +71,14 @@ class Settings {
         description: "if you dont know what coords are... why",
         category: "Cane Macro",
     })
-    COORDS_Z_1 = " "
+    COORDS_Z_1 = ""
 
     @TextProperty({
         name: "Z Coords #2",
         description: "if you dont know what coords are... why",
         category: "Cane Macro",
     })
-    COORDS_Z_2 = " "
+    COORDS_Z_2 = ""
 
 
 
