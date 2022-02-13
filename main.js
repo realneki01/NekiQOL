@@ -1,6 +1,5 @@
 /// <reference types="../CTAutocomplete" />
 /// <reference lib="es2015" />
-require("./features/webhook.js")
 require("./features/macros.js")
 import SettingsNew from "./config";
 import request from "requestV2";

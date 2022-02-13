@@ -268,6 +268,7 @@ register('worldLoad', () => {
         if (isInHub()) {
             ChatLib.command("is");
             ChatLib.chat("§aReconnecting to Island from Hub...");
+            postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `Detected World Change: Correcting player position from **HUB** to **PLAYER ISLAND**`)
             sneakBind.setState(true)
             setTimeout(() => {
                 smacro = true
@@ -277,6 +278,7 @@ register('worldLoad', () => {
         } else if (isInLobby()) {
             ChatLib.command("play sb");
             ChatLib.chat("§aReconnecting to SkyBlock from Lobby...");
+            postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `Detected World Change: Correcting player position from **LOBBY** to **GAMEMODE: SKYBLOCK**`)
             sneakBind.setState(true)
             setTimeout(() => {
                 smacro = true
@@ -286,6 +288,7 @@ register('worldLoad', () => {
         } else if (isInLimbo()) {
             ChatLib.command("lobby");
             ChatLib.chat("§aReconnecting to Lobby from Limbo...");
+            postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `Detected World Change: Correcting player position from **LIMBO** to **LOBBY**`)
         }
 
     }, 4500)
