@@ -1,19 +1,23 @@
 import { @Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProperty, @DecimalSliderProperty, @SliderProperty, @CheckboxProperty, Color, @SelectorProperty } from 'Vigilance';
 @Vigilant('NekoQOL', 'NekoQOL Settings Menu', {
     getCategoryComparator: () => (a, b) => {
-        // By default, categories, subcategories, and properties are sorted alphabetically.
-        // You can override this behavior by returning a negative number if a should be sorted before b,
-        // or a positive number if b should be sorted before a.
-
-        // In this case, we cam put Not general! to be above general.
         const categories = ['NekoQOL Main', 'S Shaped Macro', `Cane Macro`];
 
         return categories.indexOf(a.name) - categories.indexOf(b.name);
+    },
+    getPropertyComparator: () => (a, b) => {
+        const names = ["Use Webhook", "Discord User ID", "Webhook URL", "Pong the webhook"];
+
+        return names.indexOf(a.attributes.name) -
+            names.indexOf(b.attributes.name);
     }
 })
 class Settings {
     constructor() {
         this.initialize(this);
+        this.addDependency("Webhook URL", "Use Webhook")
+        this.addDependency("Discord User ID", "Use Webhook")
+        this.addDependency("Pong the webhook", "Use Webhook")
         this.setCategoryDescription("NekoQOL Main", "Main settings for NekoQOL Module")
         this.setCategoryDescription(`Cane Macro`, "Some cane macro stuff idk")
         this.setCategoryDescription(`S Shaped Macro`, `S Shaped Macro Settings`)
