@@ -70,6 +70,8 @@ class Settings {
 
     MAIN_WEBHOOK_TOGGLE = false;
 
+    // CANE MACRO SETTINGS
+
     @TextProperty({
         name: "Z Coords #1",
         description: "if you dont know what coords are... why",
