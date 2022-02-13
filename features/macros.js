@@ -79,13 +79,13 @@ register("tick", () => {
     if (CobbleMacroBind.isPressed()) {
         if (cobble == false) {
             cobble = true
-            ChatLib.chat("§c[Aza's Macro] §aCobble Macro Toggled On! OwO")
+            ChatLib.chat(`${prefix} &7Cobble Macro&f has been toggled &a&lON&f!`)
             click = true
             forwardBind.setState(true)
         }
         else if (cobble == true) {
             cobble = false
-            ChatLib.chat("§c[Aza's Macro] §4Cobble Macro Toggled Off! OwO")
+            ChatLib.chat(`${prefix} &7Cobble Macro&f has been toggled &c&lOFF&f!`)
             click = false
             forwardBind.setState(false)
         }
