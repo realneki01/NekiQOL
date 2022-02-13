@@ -2,6 +2,7 @@
 /// <reference lib="es2015" />
 require("./features/macros.js")
 import SettingsNew from "./config";
+import request from "requestV2";
 
 // Java libraries, ignore these
 const ActionListener = Java.type("java.awt.event.ActionListener");
@@ -15,6 +16,32 @@ const ButtonGroup = Java.type("javax.swing.ButtonGroup");
 const JCheckBox = Java.type("java.swing.JCheckBox");
 const Font = Java.type("java.awt.Font");
 
+function postWebhook(url, data) {
+    data = getPingWebhook(data)
+    request({
+        url: url,
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+            "User-Agent": "Mozilla/5.0"
+        },
+        body: {
+            username: "NekoQOL Alerts",
+            content: `${data}`,
+            avatar_url: "https://cdn.discordapp.com/attachments/941853201941016666/942204435701047326/loli61_2.png"
+        }
+    });
+}
+
+function getPingWebhook(content) {
+    let msg;
+    if (SettingsNew.MAIN_WEBHOOK_DISCORD_ID !== undefined) {
+        msg = `<@${SettingsNew.MAIN_WEBHOOK_DISCORD_ID}> ${content}`
+    } else {
+        msg = `${content}`
+    }
+    return msg;
+}
 
 // This is the external chat window
 j = new JFrame("Chat");
@@ -52,8 +79,8 @@ register(`command`, (...args) => {
     ChatLib.chat(`${args.slice(1).join(" ")}`)
     let testMsg = args.slice(1).join(" ")
     let msg = `This is some nice text **NYAA!**`
-    if(args == "sendmsg"){
-        postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `${msg}`)
+    if(args == "testwebhook"){
+        postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `**NYAA~!** Testing the send webhook function..`)
     }
     if(args == ""){
         ChatLib.chat(ChatLib.getChatBreak(`&b====================================================`))
@@ -61,6 +88,7 @@ register(`command`, (...args) => {
         ChatLib.chat(ChatLib.getCenteredText(`&7Module Developed by &bAzael&7 & &bSemiMute`))
         ChatLib.chat(`&c`)
         ChatLib.chat(`&7- &b/nekoqol config &9- &7&oNyopens nye config mewnnu to set nyany nekoqol setting`)
+        ChatLib.chat(`&7- &b/nekoqol testwebhook &9- &7&otest nyand myake sure your webhook settings nyare to your liking nyaa~!`)
         ChatLib.chat(`&c`)
         ChatLib.chat(ChatLib.getChatBreak(`&b====================================================`))
     }

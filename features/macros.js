@@ -111,9 +111,6 @@ register("tick", () => {
             cobble = true
             ChatLib.chat(`${prefix} &7Cobble Macro&f has been toggled &a&lON&f!`)
             click = true
-            if(SettingsNew.S_SHAPED_HOLD_W){
-                forwardBind.setState(true)
-            }
         }
         else if (cobble == true) {
             cobble = false
@@ -129,9 +126,6 @@ register("tick", () => {
             ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
             Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
             Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
-            if(SettingsNew.S_SHAPED_HOLD_W){
-                forwardBind.setState(true)
-            }
             click = true
             rightBind.setState(true)
             forwardBind.setState(true)
