@@ -1,5 +1,16 @@
 import { @Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProperty, @DecimalSliderProperty, @SliderProperty, @CheckboxProperty, Color, @SelectorProperty } from 'Vigilance';
+@Vigilant('Vigilance', 'My Settings Title Example', {
+    getCategoryComparator: () => (a, b) => {
+        // By default, categories, subcategories, and properties are sorted alphabetically.
+        // You can override this behavior by returning a negative number if a should be sorted before b,
+        // or a positive number if b should be sorted before a.
 
+        // In this case, we cam put Not general! to be above general.
+        const categories = ['NekoQOL Main', 'Wart Macro', `Cane Macro`];
+
+        return categories.indexOf(a.name) - categories.indexOf(b.name);
+    }
+})
 @Vigilant("NekoQOL")
 class Settings {
     constructor() {
@@ -28,7 +39,7 @@ class Settings {
         category: "NekoQOL Main",
     })
 
-    TEXT_INPUT = " "
+    TEXT_INPUT = ""
 
     @TextProperty({
         name: "Webhook URL",
