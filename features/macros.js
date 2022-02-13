@@ -268,7 +268,9 @@ register('worldLoad', () => {
             ChatLib.command("is");
             ChatLib.chat("§aReconnecting to Island from Hub...");
             postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `Detected World Change: Correcting player position from **HUB** to **PLAYER ISLAND**`)
-            sneakBind.setState(true)
+            if(!Player.getPlayer().isOnGround()){
+                sneakBind.setState(true)
+            }
             setTimeout(() => {
                 smacro = true
                 randomshit = true
@@ -278,7 +280,9 @@ register('worldLoad', () => {
             ChatLib.command("play sb");
             ChatLib.chat("§aReconnecting to SkyBlock from Lobby...");
             postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `Detected World Change: Correcting player position from **LOBBY** to **GAMEMODE: SKYBLOCK**`)
-            sneakBind.setState(true)
+            if(!Player.getPlayer().isOnGround()){
+                sneakBind.setState(true)
+            }
             setTimeout(() => {
                 smacro = true
                 randomshit = true
