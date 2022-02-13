@@ -1,6 +1,6 @@
 {
     "name": "NekoQOL",
-    "description": "Cats are cute",
+    "description": "The best of the best",
     "author": "Azael, SemiMute",
     "version": "1.2.2",
     "requires": ["PersistentData", "requestV2", "Vigilance"],
