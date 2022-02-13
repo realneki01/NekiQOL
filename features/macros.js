@@ -81,7 +81,9 @@ register("tick", () => {
             cobble = true
             ChatLib.chat(`${prefix} &7Cobble Macro&f has been toggled &a&lON&f!`)
             click = true
-            forwardBind.setState(true)
+            if(SettingsNew.S_SHAPED_HOLD_W){
+                forwardBind.setState(true)
+            }
         }
         else if (cobble == true) {
             cobble = false

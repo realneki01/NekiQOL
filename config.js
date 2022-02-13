@@ -87,6 +87,15 @@ class Settings {
     CANE_COORDS_Z_2 = ""
 
     // S SHAPED MACRO SETTINGS
+
+    @SwitchProperty({
+        name: "Hold W Key",
+        description: "Should your macro hold W whilst farming?",
+        category: "S Shaped Macro",
+    })
+
+    S_SHAPED_HOLD_W = false;
+
     @TextProperty({
         name: "Pitch",
         description: "What direction will the macro be facing when farming?",
