@@ -40,6 +40,7 @@ const webhookURL = SettingsNew.MAIN_WEBHOOK_URL
 
 
 function postWebhook(url,data){
+    data = getPingWebhook(data)
     request({
         url: url,
         method: 'POST',
@@ -53,6 +54,16 @@ function postWebhook(url,data){
             avatar_url: "https://cdn.discordapp.com/attachments/941853201941016666/942204435701047326/loli61_2.png"
         }
     });
+}
+
+function getPingWebhook(content) {
+    let msg;
+    if(SettingsNew.MAIN_WEBHOOK_DISCORD_ID !== undefined){
+        msg = `<@${SettingsNew.MAIN_WEBHOOK_DISCORD_ID}> ${content}`
+    } else {
+        msg = `${content}`
+    }
+    return msg;
 }
 
 // Island checks
@@ -114,8 +125,13 @@ register('command', () => {
 }).setName("guichat");
 
 register(`command`, (...args) => {
-    ChatLib.chat(`${args}`)
-    if(args == ""){
+    ChatLib.chat(`${args.slice(1).join(" ")}`)
+    let testMsg = args.slice(1).join(" ")
+    let msg = `This is some nice text **NYAA!**`
+    if(args == "sendmsg"){
+        postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `${msg}`)
+    }
+    if(args == null){
         ChatLib.chat(ChatLib.getChatBreak(`&b====================================================`))
         ChatLib.chat(ChatLib.getCenteredText(`&b&lNeko&7&lQOL`))
         ChatLib.chat(ChatLib.getCenteredText(`&7Module Developed by &bAzael&7 & &bSemiMute`))
