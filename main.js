@@ -158,7 +158,8 @@ register("tick", () => {
 
     if (Client.currentGui.get() !== null) {
         if (cobble) {
-            ChatLib.chat("§c[Aza's Macro] §4All Macros Toggled Off! OwO")
+            ChatLib.chat(`${prefix} &aAll Macros&f have been toggled &c&lOFF&f!`)
+            ChatLib.chat(`&7Detected player opening a GUI menu, force quitting all macros`)
 
             click = false
             rightBind.setState(false)
@@ -171,7 +172,8 @@ register("tick", () => {
             return;
         }
         if (smacro) {
-            ChatLib.chat("§c[Aza's Macro] §4All Macros Toggled Off! OwO")
+            ChatLib.chat(`${prefix} &aAll Macros&f have been toggled &c&lOFF&f!`)
+            ChatLib.chat(`&7Detected player opening a GUI menu, force quitting all macros`)
 
             click = false
             rightBind.setState(false)
@@ -184,7 +186,8 @@ register("tick", () => {
             return;
         }
         if (cane) {
-            ChatLib.chat("§c[Aza's Macro] §4All Macros Toggled Off! OwO")
+            ChatLib.chat(`${prefix} &aAll Macros&f have been toggled &c&lOFF&f!`)
+            ChatLib.chat(`&7Detected player opening a GUI menu, force quitting all macros`)
 
             click = false
             rightBind.setState(false)
