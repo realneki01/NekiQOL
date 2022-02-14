@@ -26,10 +26,10 @@ let lastTurnAround = new Date();
 let isReconnecting = false
 let randomshit = false
 
-function postWebhook(url, data) {
+function postWebhook(data) {
     data = getPingWebhook(data)
     request({
-        url: url,
+        url: SettingsNew.MAIN_WEBHOOK_URL,
         method: 'POST',
         headers: {
             'Content-type': 'application/json',
@@ -253,46 +253,57 @@ const isInLimbo = () => {
     return false;
 }
 register('worldLoad', () => {
-    if (smacro == false && !SettingsNew.S_FARM_AUTO_ON) return;
-    smacro = false
-    click = false
-    rightBind.setState(false)
-    leftBind.setState(false)
-    forwardBind.setState(false)
-    backwardBind.setState(false)
+    if (smacro == true && SettingsNew.MAIN_S_PING_TOGGLE){
+        postWebhook("S Macro detected a world change.")
+        smacro = false
+        click = false
+        rightBind.setState(false)
+        leftBind.setState(false)
+        forwardBind.setState(false)
+        backwardBind.setState(false)
+    }
+    if (smacro == true && SettingsNew.S_FARM_AUTO_ON) {
+        smacro = false
+        click = false
+        rightBind.setState(false)
+        leftBind.setState(false)
+        forwardBind.setState(false)
+        backwardBind.setState(false)
 
-    isReconnecting = true;
+        isReconnecting = true;
 
-    setTimeout(() => {
-        if (isInHub()) {
-            ChatLib.command("is");
-            ChatLib.chat("§aReconnecting to Island from Hub...");
-            postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `Detected World Change: Correcting player position from **HUB** to **PLAYER ISLAND**`)
-            if(!Player.getPlayer().isOnGround()){
-                sneakBind.setState(true)
+        setTimeout(() => {
+            if (isInHub()) {
+                ChatLib.command("is");
+                ChatLib.chat("§aReconnecting to Island from Hub...");
+                postWebhook(`Detected World Change: Correcting player position from **HUB** to **PLAYER ISLAND**`)
+                if (!Player.getPlayer().isOnGround()) {
+                    sneakBind.setState(true)
+                }
+                setTimeout(() => {
+                    smacro = true
+                    randomshit = true
+                    isReconnecting = false;
+                }, 5500)
+            } else if (isInLobby()) {
+                ChatLib.command("play sb");
+                ChatLib.chat("§aReconnecting to SkyBlock from Lobby...");
+                postWebhook(`Detected World Change: Correcting player position from **LOBBY** to **GAMEMODE: SKYBLOCK**`)
+                if (!Player.getPlayer().isOnGround()) {
+                    sneakBind.setState(true)
+                }
+                setTimeout(() => {
+                    smacro = true
+                    randomshit = true
+                    isReconnecting = false;
+                }, 5500)
+            } else if (isInLimbo()) {
+                ChatLib.command("lobby");
+                ChatLib.chat("§aReconnecting to Lobby from Limbo...");
+                postWebhook(`Detected World Change: Correcting player position from **LIMBO** to **LOBBY**`)
             }
-            setTimeout(() => {
-                smacro = true
-                randomshit = true
-                isReconnecting = false;
-            }, 5500)
-        } else if (isInLobby()) {
-            ChatLib.command("play sb");
-            ChatLib.chat("§aReconnecting to SkyBlock from Lobby...");
-            postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `Detected World Change: Correcting player position from **LOBBY** to **GAMEMODE: SKYBLOCK**`)
-            if(!Player.getPlayer().isOnGround()){
-                sneakBind.setState(true)
-            }
-            setTimeout(() => {
-                smacro = true
-                randomshit = true
-                isReconnecting = false;
-            }, 5500)
-        } else if (isInLimbo()) {
-            ChatLib.command("lobby");
-            ChatLib.chat("§aReconnecting to Lobby from Limbo...");
-            postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `Detected World Change: Correcting player position from **LIMBO** to **LOBBY**`)
-        }
 
-    }, 4500)
+        }, 4500)
+    }
 });
+export{prefix}
