@@ -1,6 +1,7 @@
 /// <reference types="../CTAutocomplete" />
 /// <reference lib="es2015" />
 require("./features/macros.js")
+import { prefix } from "./features/macros.js"
 import SettingsNew from "./config";
 import request from "requestV2";
 
@@ -15,11 +16,13 @@ const JRadioButton = Java.type("javax.swing.JRadioButton");
 const ButtonGroup = Java.type("javax.swing.ButtonGroup");
 const JCheckBox = Java.type("java.swing.JCheckBox");
 const Font = Java.type("java.awt.Font");
+let afk = false
+let afktime = new Date();
 
-function postWebhook(url, data) {
+function postWebhook(data) {
     data = getPingWebhook(data)
     request({
-        url: url,
+        url: SettingsNew.MAIN_WEBHOOK_URL,
         method: 'POST',
         headers: {
             'Content-type': 'application/json',
@@ -76,11 +79,10 @@ register('command', () => {
 }).setName("guichat");
 
 register(`command`, (...args) => {
-    ChatLib.chat(`${args.slice(1).join(" ")}`)
     let testMsg = args.slice(1).join(" ")
     let msg = `This is some nice text **NYAA!**`
     if(args == "testwebhook"){
-        postWebhook(SettingsNew.MAIN_WEBHOOK_URL, `**NYAA~!** Testing the send webhook function..`)
+        postWebhook(`**NYAA~!** Testing the send webhook function..`)
     }
     if(args == ""){
         ChatLib.chat(ChatLib.getChatBreak(`&b====================================================`))
@@ -95,4 +97,21 @@ register(`command`, (...args) => {
     if(args == "config"){
         SettingsNew.openGUI()
     }
+    if(args == "afk"){
+        if (afk == false){
+            afk = true
+            ChatLib.chat(`${prefix} &aAFK Pings&f have been toggled &a&lON&f!`)
+        }
+        else if (afk == true){
+            afk = false
+            ChatLib.chat(`${prefix} &aAFK Pings&f have been toggled &c&lOFF&f!`)
+        }
+    }
 }).setName(`nekoqol`)
+
+register('worldLoad', () => {
+    if (afk == true){
+        if (new Date().getTime() - afktime.getTime() < 1000) return;
+        postWebhook("Island change noticed, you should go back to AFK")
+    }
+})
