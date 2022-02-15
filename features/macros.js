@@ -224,10 +224,19 @@ register("tick", () => {
 
 
 })
+register(`chat`, (message) => {
+    ChatLib.chat(`Detected Chat`)
+    console.log(`CHAT MESSAGE DETECTED`)
+})
 
 
 // failsafe
 // Island checks
+let reboot;
+
+const isRestart = () => {
+
+}
 const isInHub = () => {
     return Scoreboard.getLines().find(l => l.toString().includes("Village")) !== undefined;
 }
