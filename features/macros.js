@@ -296,25 +296,28 @@ register("chat", function(event) {
     if(SettingsNew.S_FARM_AUTO_ON){
         if(msgString.includes(`"gametype":"MAIN"`) || msgString.includes(`"gametype":"PROTOTYPE"`)){
             ReconnectMode = true
+            ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp player to gamemode &bSkyblock&f.`)
             ChatLib.command(`play sb`)
         }
         setTimeout(() => {
             if(msgString.includes(`"map":"Hub"`) && ReconnectMode == true){
+                ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to their &aPrivate Island&f.`)
                 ChatLib.command(`warp home`)
             }
         }, 1000);
     }
     if(ReconnectMode == true){
         if(msgString.includes(`"map":"Private Island"`)){
-            ChatLib.chat(`${prefix} &7Detecting player joining island`)
+            ChatLib.chat(`${prefix} &7[FAILSAFE] &fDetected client joining &aPrivate Island&f.`)
             sneakBind.setState(true)
             setTimeout(() => {
                 sneakBind.setState(false)
             }, 1000);
             setTimeout(() => {
-                ChatLib.chat(`&cForcing S Shaped Macro to state &a&lON&c due to Auto Reconnect`)
+                ChatLib.chat(`${prefix} &cForcing S Shaped Macro to state &a&lON&c due to Auto Reconnect`)
                 smacro = true
                 ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
+                postWebhook(`Forcing client S Shaped to state **ON** due to a reconnect sequence`)
                 Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
                 Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
                 click = true
