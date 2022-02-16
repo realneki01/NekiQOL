@@ -52,6 +52,36 @@ function getPingWebhook(content) {
     }
     return msg;
 }
+register(`command`, (...args) => {
+    let testMsg = args.slice(1).join(" ")
+    let msg = `This is some nice text **NYAA!**`
+    if(args == "setState"){
+        ChatLib.chat(`Attempting to set the state of S MACRO`)
+        SMacroBind.setState(true)
+    }
+    if(args == ""){
+        ChatLib.chat(ChatLib.getChatBreak(`&b====================================================`))
+        ChatLib.chat(ChatLib.getCenteredText(`&b&lNeko&7&lQOL &7DEV COMMANDS`))
+        ChatLib.chat(ChatLib.getCenteredText(`&7Module Developed by &bAzael&7 & &bSemiMute`))
+        ChatLib.chat(`&c`)
+        ChatLib.chat(`&7- &b/nekoqol setState &9- &7&oSet the state of SMacro to true`)
+        ChatLib.chat(`&c`)
+        ChatLib.chat(ChatLib.getChatBreak(`&b====================================================`))
+    }
+    if(args == "config"){
+        SettingsNew.openGUI()
+    }
+    if(args == "afk"){
+        if (afk == false){
+            afk = true
+            ChatLib.chat(`${prefix} &aAFK Pings&f have been toggled &a&lON&f!`)
+        }
+        else if (afk == true){
+            afk = false
+            ChatLib.chat(`${prefix} &aAFK Pings&f have been toggled &c&lOFF&f!`)
+        }
+    }
+}).setName(`nekoqoldev`)
 
 register("tick", () => {
     lastY = getBlock
@@ -128,7 +158,9 @@ register("tick", () => {
             Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
             click = true
             rightBind.setState(true)
-            forwardBind.setState(true)
+            if(SettingsNew.S_SHAPED_HOLD_W){
+                forwardBind.setState(true)
+            }
         }
         else if (smacro == true) {
             smacro = false
@@ -224,10 +256,6 @@ register("tick", () => {
 
 
 })
-register(`chat`, (message) => {
-    ChatLib.chat(`Detected Chat`)
-    console.log(`CHAT MESSAGE DETECTED`)
-})
 
 
 // failsafe
@@ -235,7 +263,6 @@ register(`chat`, (message) => {
 let reboot;
 
 const isRestart = () => {
-
 }
 const isInHub = () => {
     return Scoreboard.getLines().find(l => l.toString().includes("Village")) !== undefined;
@@ -261,7 +288,62 @@ const isInLimbo = () => {
     ) return true;
     return false;
 }
+
+let ReconnectMode;
+register("chat", function(event) {
+    var msgString = ChatLib.removeFormatting(ChatLib.getChatMessage(event))
+    console.log(msgString)
+    if(SettingsNew.S_FARM_AUTO_ON){
+        if(msgString.includes(`"gametype":"MAIN"`) || msgString.includes(`"gametype":"PROTOTYPE"`)){
+            ReconnectMode = true
+            ChatLib.command(`play sb`)
+        }
+        setTimeout(() => {
+            if(msgString.includes(`"map":"Hub"`) && ReconnectMode == true){
+                ChatLib.command(`warp home`)
+            }
+        }, 1000);
+    }
+    if(ReconnectMode == true){
+        if(msgString.includes(`"map":"Private Island"`)){
+            ChatLib.chat(`${prefix} &7Detecting player joining island`)
+            sneakBind.setState(true)
+            setTimeout(() => {
+                sneakBind.setState(false)
+            }, 1000);
+            setTimeout(() => {
+                ChatLib.chat(`&cForcing S Shaped Macro to state &a&lON&c due to Auto Reconnect`)
+                smacro = true
+                ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
+                Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
+                Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
+                click = true
+                rightBind.setState(true)
+                if(SettingsNew.S_SHAPED_HOLD_W){
+                    forwardBind.setState(true)
+                }
+                ReconnectMode = false
+            }, 5000);
+        }
+    }
+}),
+
 register('worldLoad', () => {
+    // AUTO RECONNECT SYSTEM
+    if(SettingsNew.S_FARM_AUTO_ON){
+        if(isInLobby()){
+            ChatLib.chat(`${prefix} &4&lDEBUGGER: &7Detected player in Lobby with setting &cS Shaped Auto Start&7 as &a&lON&7!\n&7Attempting to warp player to gamemode SKYBLOCK`)
+            ReconnectMode = true
+            ChatLib.command(`play sb`)
+            setTimeout(() => {
+                
+            }, 2000);
+            if(isInHub()){
+                ChatLib.chat(`${prefix} &4&lDEBUGGER: &7Detected player in Hub with setting &cS Shaped Auto Start&7 as &a&lON&7!\n&7Attempting to warp player to PRIVATE ISLAND`)
+                ChatLib.command(`warp home`)
+            }
+        }
+    }
     if (smacro == true && SettingsNew.MAIN_S_PING_TOGGLE){
         postWebhook("S Macro detected a world change.")
         smacro = false
@@ -271,7 +353,7 @@ register('worldLoad', () => {
         forwardBind.setState(false)
         backwardBind.setState(false)
     }
-    if (smacro == true && SettingsNew.S_FARM_AUTO_ON) {
+    if (smacro == true) {
         smacro = false
         click = false
         rightBind.setState(false)
@@ -295,6 +377,9 @@ register('worldLoad', () => {
                     isReconnecting = false;
                 }, 5500)
             } else if (isInLobby()) {
+                if(SettingsNew.S_FARM_AUTO_ON){
+
+                }
                 ChatLib.command("play sb");
                 ChatLib.chat("§aReconnecting to SkyBlock from Lobby...");
                 postWebhook(`Detected World Change: Correcting player position from **LOBBY** to **GAMEMODE: SKYBLOCK**`)
@@ -310,6 +395,8 @@ register('worldLoad', () => {
                 ChatLib.command("lobby");
                 ChatLib.chat("§aReconnecting to Lobby from Limbo...");
                 postWebhook(`Detected World Change: Correcting player position from **LIMBO** to **LOBBY**`)
+            } else if(isInIsland){
+
             }
 
         }, 4500)
