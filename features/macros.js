@@ -290,21 +290,62 @@ const isInLimbo = () => {
 }
 
 let ReconnectMode;
+function START_S_MACRO(){
+    smacro = true
+    ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
+    Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
+    Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
+    click = true
+    rightBind.setState(true)
+    if(SettingsNew.S_SHAPED_HOLD_W){
+        forwardBind.setState(true)
+    }
+    ReconnectMode = false
+}
+function KILL_S_MACRO(){
+    ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &c&lOFF&f!`)
+    rightBind.setState(false)
+    forwardBind.setState(false)
+    click = false
+    leftBind.setState(false)
+    smacro = false
+}
 register("chat", function(event) {
     var msgString = ChatLib.removeFormatting(ChatLib.getChatMessage(event))
-    console.log(msgString)
+    if(msgString.startsWith(`[Important] This server will`)){
+        KILL_S_MACRO()
+        reboot = true
+        ChatLib.chat(`${prefix} &fDetected &cServer Reboot&f... Forcing S Shaped as &c&lOFF&f!\n&7Attempting to warp client back to island in 90 Seconds`)
+        setTimeout(() => {
+            ChatLib.say(`/warp home`)
+        }, 120000);
+        setTimeout(() => {
+            START_S_MACRO()
+        }, 140000);
+    }
+    // FAIL SAFE SERVER WARPING
+    if(msgString.includes(`"map":"Hub"` && reboot !== true) && smacro == true){
+        KILL_S_MACRO()
+        ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to &aPrivate Island &fin &c120 Seconds&f!`)
+        setTimeout(() => {
+            ChatLib.say(`/warp home`)
+        }, 120000);
+        setTimeout(() => {
+            START_S_MACRO()
+        }, 140000);
+    }
     if(SettingsNew.S_FARM_AUTO_ON){
         if(msgString.includes(`"gametype":"MAIN"`) || msgString.includes(`"gametype":"PROTOTYPE"`)){
             ReconnectMode = true
-            ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp player to gamemode &bSkyblock&f.`)
+            ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to gamemode &bSkyblock&f.`)
             ChatLib.command(`play sb`)
         }
+    }
+    if(msgString.includes(`"map":"Hub"`) && ReconnectMode == true){
+        ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to &aPrivate Island&f.`)
         setTimeout(() => {
-            if(msgString.includes(`"map":"Hub"`) && ReconnectMode == true){
-                ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to their &aPrivate Island&f.`)
-                ChatLib.command(`warp home`)
-            }
-        }, 1000);
+            ChatLib.command(`warp home`)
+        }, 60000);
     }
     if(ReconnectMode == true){
         if(msgString.includes(`"map":"Private Island"`)){

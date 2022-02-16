@@ -45,7 +45,7 @@ class Settings {
 
     @SwitchProperty({
         name: "MyFilter Notifications",
-        description: "Allows &dWeebchan&r to notify you when a message was removed from &dDMS&r, &9Party&r, &2Guild&r, &3Officer&r, or All chat",
+        description: "Allows &bNekoQOL&r to notify you when a message was removed from &dDMS&r, &9Party&r, &2Guild&r, &3Officer&r, or All chat",
         category: "MyFilter",
     })
     MYFILTER_NOTIFICATIONS = true;
@@ -88,7 +88,7 @@ class Settings {
 
     @SwitchProperty({
         name: "Filter Salvage Messages",
-        description: "Filters out the &aYou salvaged a &dExample Item&a for &d+15 &aUndead Essence!&7 message",
+        description: "Filters out the &aYou salvaged a &dHeroic Hyperion &c✪✪✪✪&6✪&a for &d+15 &aUndead Essence!&7 message",
         category: "MyFilter",
         subcategory: "Other",
     })
@@ -96,7 +96,7 @@ class Settings {
 
     @SwitchProperty({
         name: "Filter Reforge Messages",
-        description: "Filters out the &aYou reforged your &6Example Item&a into a &6Heroic Example Item&a!&r message",
+        description: "Filters out the &aYou reforged your &6Hyperion &c✪✪✪✪&6✪&a into a &6Heroic Hyperion &c✪✪✪✪&6✪&a!&r message",
         category: "MyFilter",
         subcategory: "Other",
     })
@@ -112,7 +112,7 @@ class Settings {
 
     @SwitchProperty({
         name: "Filter GEXP Earned Messages",
-        description: "Filters out the &aYou earned &2?? GEXP&a from playing SkyBlock!&r message",
+        description: "Filters out the &aYou earned &269 GEXP&a from playing SkyBlock!&r message",
         category: "MyFilter",
         subcategory: "Other",
     })
