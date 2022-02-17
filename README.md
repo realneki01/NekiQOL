@@ -15,6 +15,7 @@
 (Works great for removing spam messages from bots)
 
 
+
 **MODULE INSTALLATION PROCESS**
 
 - Go to https://chattriggers.com/ and download the stable version of the mod
@@ -23,7 +24,9 @@
 
 - Download the latest NekoQOL update from #updates 
 
-- Navigate to `.minecraft\config\ChatTriggers\modules` via `%appdata%` ((If it does not have a folder called that, launch the game with the mod installed and exit the game after its fully loaded))
+- Navigate to `.minecraft\config\ChatTriggers\modules` via `%appdata%` 
+
+- ((If it does not have a folder called that, launch the game with the mod installed and exit the game after its fully loaded))
 
 - Extract zip file into the Modules folder
 
@@ -32,7 +35,7 @@
 
 **RECONNECTING SYSTEMS (OPTIONAL)**
 
-**REQUIRES:** Requires the 5zig mod - Download from https://5zigreborn.eu/
+Requires the 5zig mod - Download from https://5zigreborn.eu/
 
 
 **UPDATING PROCESS**
