@@ -312,7 +312,7 @@ function KILL_S_MACRO(){
 }
 register("chat", function(event) {
     var msgString = ChatLib.removeFormatting(ChatLib.getChatMessage(event))
-    if(msgString.startsWith(`[Important] This server will`)){
+    if(msgString.startsWith(`[Important] This server will`) && smacro == true){
         KILL_S_MACRO()
         reboot = true
         ChatLib.chat(`${prefix} &fDetected &cServer Reboot&f... Forcing S Shaped as &c&lOFF&f!\n&7Attempting to warp client back to island in 90 Seconds`)
