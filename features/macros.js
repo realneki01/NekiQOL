@@ -274,7 +274,7 @@ const isInIsland = () => {
 const isInLobby = () => {
     let i = Player.getInventory().getStackInSlot(0);
     let i2 = Player.getInventory().getStackInSlot(4);
-    if (i.getID() === -1 || i2.getID() === -1) return false;
+    if (i === null || i2 === null) return false;
     if (i.getRegistryName() === "minecraft:compass" && i2.getRegistryName() === "minecraft:trapped_chest") return true;
     return false;
 }
@@ -373,7 +373,7 @@ register("chat", function(event) {
 
 register('worldLoad', () => {
     // AUTO RECONNECT SYSTEM
-    if(SettingsNew.S_FARM_AUTO_ON){
+    if(SettingsNew.S_FARM_AUTO_ON && smacro){
         if(isInLobby()){
             ChatLib.chat(`${prefix} &4&lDEBUGGER: &7Detected player in Lobby with setting &cS Shaped Auto Start&7 as &a&lON&7!\n&7Attempting to warp player to gamemode SKYBLOCK`)
             ReconnectMode = true
