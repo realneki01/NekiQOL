@@ -15,7 +15,7 @@
 (Works great for removing spam messages from bots)
 
 
-
+# Installation Process
 **MODULE INSTALLATION PROCESS**
 
 - Go to https://chattriggers.com/ and download the stable version of the mod
