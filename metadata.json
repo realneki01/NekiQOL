@@ -2,7 +2,7 @@
     "name": "NekoQOL",
     "description": "The best of the best",
     "author": "Azael, SemiMute",
-    "version": "1.2.2",
+    "version": "0.1.2",
     "requires": ["PersistentData", "requestV2", "Vigilance", "PogData"],
     "entry": "main.js"
 }
