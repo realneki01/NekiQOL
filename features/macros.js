@@ -149,6 +149,7 @@ register("tick", () => {
             forwardBind.setState(false)
         }
     }
+    
     // S Macro toggle
     if (SMacroBind.isPressed()) {
         if (smacro == false) {
@@ -174,8 +175,6 @@ register("tick", () => {
 
     // S Macro turning around and "failsafe"
     if (smacro == true) {
-        Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90.0
-        Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
         if (lastY != getBlock) {
             if (new Date().getTime() - lastTurnAround.getTime() < 1000) return;
             lastTurnAround = new Date();
