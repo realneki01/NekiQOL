@@ -354,6 +354,7 @@ register("chat", function(event) {
         }
     }
     if(msgString.includes(`"map":"Hub"`) && ReconnectMode == true){
+        KILL_S_MACRO()
         ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to &aPrivate Island&f.`)
         setTimeout(() => {
             ChatLib.command(`warp home`)
