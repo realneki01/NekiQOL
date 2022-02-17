@@ -25,7 +25,7 @@ var key = new PogObject("NekoQOL", {
     keywords: [],
     apikey: "",
 })
-
+export{ key }
 
 function postWebhook(data) {
     data = getPingWebhook(data)

@@ -1,5 +1,5 @@
 import SettingsNew from "../config";
-
+import { key } from "../main"
 
 register("chat", function(event) {
     var msgString = ChatLib.removeFormatting(ChatLib.getChatMessage(event))
