@@ -25,6 +25,7 @@ let smacro = false;
 let lastTurnAround = new Date();
 let isReconnecting = false
 let randomshit = false
+let lastdir = 1
 
 function postWebhook(data) {
     data = getPingWebhook(data)
@@ -158,7 +159,15 @@ register("tick", () => {
             Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
             Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
             click = true
-            rightBind.setState(true)
+            if(lastdir == 1){
+                rightBind.setState(true)
+            }
+            else if(lastdir == 2){
+                leftBind.setState(true)
+            }
+            else{
+                rightBind.setState(true)
+            }
             if(SettingsNew.S_SHAPED_HOLD_W){
                 forwardBind.setState(true)
             }
@@ -179,6 +188,7 @@ register("tick", () => {
             if (new Date().getTime() - lastTurnAround.getTime() < 1000) return;
             lastTurnAround = new Date();
             if (rightBind.isKeyDown()) {
+                lastdir = 2
                 rightBind.setState(false);
                 leftBind.setState(true);
                 setTimeout(() => {
@@ -186,6 +196,7 @@ register("tick", () => {
                 }, 1000);
             }
             else if (leftBind.isKeyDown()) {
+                lastdir = 1
                 leftBind.setState(false);
                 rightBind.setState(true);
                 setTimeout(() => {
@@ -196,10 +207,12 @@ register("tick", () => {
         if (new Date().getTime() - lastTurnAround.getTime() > 60000) {
             lastTurnAround = new Date();
             if (rightBind.isKeyDown()) {
+                lastdir = 2
                 rightBind.setState(false);
                 leftBind.setState(true);
             }
             else if (leftBind.isKeyDown()) {
+                lastdir = 1
                 leftBind.setState(false);
                 rightBind.setState(true);
             }
