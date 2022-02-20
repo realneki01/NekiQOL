@@ -138,6 +138,10 @@ register("tick", () => {
     }
     // Cobble macro toggle
     if (CobbleMacroBind.isPressed()) {
+        if (isInIsland() == false){
+            ChatLib.chat(`${prefix} &cCobble Macro&f cannot be started outside your island!`)
+            return
+        }
         if (cobble == false) {
             cobble = true
             ChatLib.chat(`${prefix} &7Cobble Macro&f has been toggled &a&lON&f!`)
@@ -153,6 +157,10 @@ register("tick", () => {
     
     // S Macro toggle
     if (SMacroBind.isPressed()) {
+        if (isInIsland() == false){
+            ChatLib.chat(`${prefix} &cS Shaped Macro&f cannot be started outside your island!`)
+            return
+        }
         if (smacro == false) {
             smacro = true
             ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
@@ -232,6 +240,10 @@ register("tick", () => {
     }
     // Cane macro toggle
     if (CaneMacrokeyBind.isPressed()) {
+        if (isInIsland() == false){
+            ChatLib.chat(`${prefix} &cCane Macro&f cannot be started outside your island!`)
+            return
+        }
         if (cane == false) {
             cane = true
             ChatLib.chat(`${prefix} &aCane Macro&f has been toggled &a&lON&f!`)
