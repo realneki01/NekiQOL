@@ -281,7 +281,7 @@ const isInHub = () => {
 }
 
 const isInIsland = () => {
-    return Scoreboard.getLines().find(l => l.toString().includes("Your island")) !== undefined;
+    return Scoreboard.getLines().find(l => l.toString().includes("Your Isla")) !== undefined;
 }
 
 const isInLobby = () => {
