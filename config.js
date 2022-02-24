@@ -48,7 +48,8 @@ class Settings {
         name: "Move Display",
         description: "Click to change the location where the counter is rendered",
         category: "NekoQOL Main",
-        placeholder: "Move"
+        placeholder: "Move",
+        subcategory: "Rendering"
     })
     action() {
         Client.currentGui.close()
