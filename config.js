@@ -35,6 +35,27 @@ class Settings {
     })
     FUN_NEKO_MODE = false;
 
+    @SwitchProperty({
+        name: "Render Profits GUI",
+        description: "Show Profits on screen?",
+        category: "NekoQOL Main",
+        subcategory: "Rendering"
+    })
+
+    MAIN_RENDER_GUI = false;
+
+    @ButtonProperty({
+        name: "Move Display",
+        description: "Click to change the location where the counter is rendered",
+        category: "NekoQOL Main",
+        placeholder: "Rendering"
+    })
+    action() {
+        Client.currentGui.close()
+    // The current vigilance messes with my moving gui, this fixes it
+        setTimeout(() => ChatLib.command("nekoqol moveSGUI", true), 100)
+    }
+
     // 
     @SwitchProperty({
         name: "Improved MyFilter &cIN-DEV",
@@ -150,6 +171,7 @@ class Settings {
 
     MAIN_WEBHOOK_DISCORD_ID = ""
 
+
     @SwitchProperty({
         name: "Pong the webhook",
         description: "Do you want to get &lPONGED&r in discord",
@@ -210,6 +232,14 @@ class Settings {
     })
 
     S_SHAPED_HOLD_W = false;
+
+    @SwitchProperty({
+        name: "Render Profits GUI",
+        description: "Show Profits on screen?",
+        category: "S Shaped Macro",
+    })
+
+    S_SHAPED_GUI = false;
 
     @TextProperty({
         name: "Pitch",

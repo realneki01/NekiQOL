@@ -2,7 +2,7 @@
 /// <reference lib="es2015" />
 require("./features/macros.js")
 require(`./features/myfilter.js`)
-import { prefix } from "./features/macros.js"
+import { prefix, moveGui } from "./features/macros.js"
 import SettingsNew from "./config";
 import request from "requestV2";
 import PogObject from "PogData";
@@ -89,6 +89,9 @@ register('command', () => {
 register(`command`, (...args) => {
     let testMsg = args.slice(1).join(" ")
     let msg = `This is some nice text **NYAA!**`
+    if(args == "moveSGUI"){
+        moveGui.open()
+    }
     if(args == "testwebhook"){
         postWebhook(`**NYAA~!** Testing the send webhook function..`)
     }

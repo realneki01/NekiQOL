@@ -26,6 +26,12 @@ let lastTurnAround = new Date();
 let isReconnecting = false
 let randomshit = false
 let lastdir = 1
+let sessionProfits = 0
+let sessionCounter = 0
+
+let bronze = 0
+let silver = 0
+let gold = 0
 
 function postWebhook(data) {
     data = getPingWebhook(data)
@@ -149,6 +155,7 @@ register("tick", () => {
         if (cobble == false) {
             cobble = true
             ChatLib.chat(`${prefix} &7Cobble Macro&f has been toggled &a&lON&f!`)
+            sessionProfits = 0
             click = true
         }
         else if (cobble == true) {
@@ -168,6 +175,20 @@ register("tick", () => {
         if (smacro == false) {
             smacro = true
             ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
+            sessionProfits = 0
+            gold = 0
+            silver = 0
+            bronze = 0
+            Player
+            ?.getInventory()
+            ?.getItems()
+            ?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID())) 
+            ?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
+            ?.forEach(item => {
+                const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
+                if (!nbtData.get('mined_crops')) return;
+                sessionCounter = nbtData.getInteger('mined_crops');
+            });
             Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
             Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
             click = true
@@ -353,6 +374,136 @@ function KILL_S_MACRO(){
     leftBind.setState(false)
     smacro = false
 }
+// OVERLAY
+const killsPerLevel = {
+	1: 0,
+	2: 1000,
+	3: 5000,
+	4: 25000,
+	5: 100000,
+	6: 300000,
+	7: 1500000,
+	8: 5000000,
+	9: 20000000,
+	10: 100000000,
+}
+const File = Java.type("java.io.File")
+let loc = {x:0,y:0}
+if (!new File(`${Config.modulesFolder}/NekoQOL/loc.json`).exists()) {
+	FileLib.write(`${Config.modulesFolder}/NekoQOL/loc.json`, JSON.stringify({x:0,y:0}))
+} else loc = JSON.parse(FileLib.read(`${Config.modulesFolder}/NekoQOL/loc.json`))
+
+const changeLoc = (x,y) => {
+	loc.x = x
+	loc.y = y
+	FileLib.write(`${Config.modulesFolder}/NekoQOL/loc.json`, JSON.stringify(loc))
+}
+
+const moveGui = new Gui()
+
+moveGui.registerDraw(() => {
+	const text = 'Drag to move the profit counter and Press ESC to go back';
+	const scale = 1.8;
+	const color = Renderer.color(255, 55, 55);
+	new Text(text, Renderer.screen.getWidth() / 2 - Renderer.getStringWidth(text) * scale / 2, Renderer.screen.getHeight() / 2 - 50).setColor(color).setScale(scale).setShadow(true).draw();
+});
+
+moveGui.registerKeyTyped((char, key) => {
+	if (key === 45 || 1) {
+		moveGui.close()
+		SettingsNew.openGUI()
+	}
+
+})
+
+register('dragged', (dx, dy) => {
+	if (!moveGui.isOpen()) return;
+
+	trackerDisplay.setRenderLoc(
+		trackerDisplay.getRenderX() + dx,
+		trackerDisplay.getRenderY() + dy,
+	);
+	changeLoc(
+	MathLib.map(
+		trackerDisplay.getRenderX(),
+		0, Renderer.screen.getWidth(),
+		0, 1
+	),
+	MathLib.map(
+		trackerDisplay.getRenderY(),
+		0, Renderer.screen.getHeight(),
+		0, 1
+	)
+	)
+
+});
+
+const trackerDisplay = new Display();
+
+trackerDisplay.addLine(1);
+trackerDisplay.setRenderLoc(
+
+		Renderer.screen.getWidth() * loc.x,
+		Renderer.screen.getHeight() * loc.y
+);
+
+register('renderOverlay', () => {
+	if (!SettingsNew.MAIN_RENDER_GUI) return trackerDisplay.shouldRender = false;
+	if (moveGui.isOpen()) return trackerDisplay.shouldRender = true;
+	trackerDisplay.shouldRender = true;
+
+	trackerDisplay
+		.setRenderLoc(
+			Renderer.screen.getWidth() * loc.x,
+			Renderer.screen.getHeight() * loc.y
+		)
+		.render();
+});
+// update display
+const maxLevel = Math.max(...Object.keys(killsPerLevel));
+
+const getNextKillCount = kills => {
+	let nextKillCount;
+
+	for (let index = 1; index <= maxLevel; index++) {
+		nextKillCount = killsPerLevel[index];
+		if (kills < killsPerLevel[index]) break;
+	}
+
+	return nextKillCount;
+}
+
+const localeString = (number, separator) => {
+	if (!separator) return number;
+	return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+};
+
+register('step', () => {
+	let kills;
+
+	Player
+		?.getInventory()
+		?.getItems()
+		?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID())) 
+		?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
+		?.forEach(item => {
+			const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
+			if (!nbtData.get('mined_crops')) return;
+			kills = nbtData.getInteger('mined_crops');
+		});
+
+	let separator = ","
+	
+    trackerDisplay.setLine(1, new DisplayLine(`&8[&b&lNeko&7&lQOL &fGUI&8]`).setShadow(true))
+	trackerDisplay.setLine(3, new DisplayLine(`&9* &b&lCounter &7- &f${isNaN(kills) ? '-/-' : kills < killsPerLevel[maxLevel] ? localeString(kills, separator) + '/' + localeString(getNextKillCount(kills), separator) : localeString(kills, separator)+ ' (Maxed)'}`).setShadow(true));
+    trackerDisplay.setLine(4, new DisplayLine(`&9* &b&lProfit Type &7- &cNether Wart`).setShadow(true))
+    let profit = kills - sessionCounter
+    profit = profit * 2
+    trackerDisplay.setLine(5, new DisplayLine(`&9* &b&lSession Profits &7- &a+ $${localeString(profit, separator)}`).setShadow(true))
+    trackerDisplay.setLine(6, new DisplayLine(`&9* &b&lMedals Won &7- &6* x${gold} &7* x${silver} &c* x${bronze}`).setShadow(true))
+}).setFps(5);
+
+
 register("chat", function(event) {
     var msgString = ChatLib.removeFormatting(ChatLib.getChatMessage(event))
     if(msgString.startsWith(`[Important] This server will`) && smacro == true){
@@ -371,6 +522,17 @@ register("chat", function(event) {
         }, 140000);
     }
     // FAIL SAFE SERVER WARPING
+    if(SettingsNew.MAIN_RENDER_GUI){
+        if(msgString.startsWith(`[NPC] Jacob: You earned a BRONZE`)){
+            bronze = bronze + 1
+        }
+        if(msgString.startsWith(`[NPC] Jacob: You earned a SILVER`)){
+            silver = silver + 1
+        }
+        if(msgString.startsWith(`[NPC] Jacob: You earned a GOLD`)){
+            gold = gold + 1
+        }
+    }
     if(msgString.includes(`"map":"Hub"` && reboot !== true) && smacro == true){
         KILL_S_MACRO()
         ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to &aPrivate Island &fin &c120 Seconds&f!`)
@@ -498,4 +660,4 @@ register('worldLoad', () => {
         }, 4500)
     }
 });
-export{prefix}
+export{prefix, moveGui}
