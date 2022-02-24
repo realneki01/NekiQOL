@@ -24,7 +24,7 @@ let cobble = false;
 let smacro = false;
 let lastTurnAround = new Date();
 let isReconnecting = false
-let randomshit = false
+let reconnectDone = false
 let lastdir = 1
 
 function postWebhook(data) {
@@ -235,11 +235,11 @@ register("tick", () => {
                 Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
             }
         }
-        if (isReconnecting == false && randomshit == true) {
+        if (isReconnecting == false && reconnectDone == true) {
             START_S_MACRO()
             Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90.0
             Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
-            randomshit = false
+            reconnectDone = false
             sneakBind.setState(false)
             lastTurnAround = new Date();
         }
@@ -386,7 +386,7 @@ register('worldLoad', () => {
                 sneakBind.setState(true)
                 setTimeout(() => {
                     smacro = true
-                    randomshit = true
+                    reconnectDone = true
                     isReconnecting = false;
                 }, 6500)
             } else if (isInLobby()) {
@@ -398,7 +398,7 @@ register('worldLoad', () => {
                 sneakBind.setState(true)
                 setTimeout(() => {
                     smacro = true
-                    randomshit = true
+                    reconnectDone = true
                     isReconnecting = false;
                 }, 6500)
             } else if (isInLimbo()) {
