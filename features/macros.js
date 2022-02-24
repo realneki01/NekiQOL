@@ -92,6 +92,10 @@ register("tick", () => {
     getBlockX = Math.round(Player.getX())
     // This is to turn off all defined macros, if you add any macro on your own add it to here, so it turns off in case you open a menu
 
+    if(smacro){
+        Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
+        Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
+    }
     if (Client.currentGui.get() !== null) {
         if (cobble) {
             ChatLib.chat(`${prefix} &aAll Macros&f have been toggled &c&lOFF&f!`)
@@ -210,11 +214,15 @@ register("tick", () => {
                 lastdir = 2
                 rightBind.setState(false);
                 leftBind.setState(true);
+                Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
+                Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
             }
             else if (leftBind.isKeyDown()) {
                 lastdir = 1
                 leftBind.setState(false);
                 rightBind.setState(true);
+                Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
+                Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
             }
         }
         if (isReconnecting == false && randomshit == true) {
@@ -332,6 +340,10 @@ register("chat", function(event) {
             ChatLib.say(`/warp home`)
         }, 120000);
         setTimeout(() => {
+            sneakBind.setState(true)
+            setTimeout(() => {
+                sneakBind.setState(false)
+            }, 1000);
             START_S_MACRO()
         }, 140000);
     }
@@ -343,6 +355,10 @@ register("chat", function(event) {
             ChatLib.say(`/warp home`)
         }, 120000);
         setTimeout(() => {
+            sneakBind.setState(true)
+            setTimeout(() => {
+                sneakBind.setState(false)
+            }, 1000);
             START_S_MACRO()
         }, 140000);
     }
@@ -363,10 +379,6 @@ register("chat", function(event) {
     if(ReconnectMode == true){
         if(msgString.includes(`"map":"Private Island"`)){
             ChatLib.chat(`${prefix} &7[FAILSAFE] &fDetected client joining &aPrivate Island&f.`)
-            sneakBind.setState(true)
-            setTimeout(() => {
-                sneakBind.setState(false)
-            }, 1000);
             setTimeout(() => {
                 ChatLib.chat(`${prefix} &cForcing S Shaped Macro to state &a&lON&c due to Auto Reconnect`)
                 smacro = true
@@ -375,7 +387,11 @@ register("chat", function(event) {
                 Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
                 Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
                 click = true
-                rightBind.setState(true)
+                sneakBind.setState(true)
+                setTimeout(() => {
+                    sneakBind.setState(false)
+                }, 1000);
+                START_S_MACRO()
                 if(SettingsNew.S_SHAPED_HOLD_W){
                     forwardBind.setState(true)
                 }
