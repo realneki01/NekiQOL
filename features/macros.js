@@ -638,6 +638,7 @@ register('worldLoad', () => {
                 if(SettingsNew.S_FARM_AUTO_ON){
 
                 }
+
                 ChatLib.command("play sb");
                 ChatLib.chat("§aReconnecting to SkyBlock from Lobby...");
                 postWebhook(`Detected World Change: Correcting player position from **LOBBY** to **GAMEMODE: SKYBLOCK**`)
