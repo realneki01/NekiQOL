@@ -211,6 +211,15 @@ class Settings {
 
     S_SHAPED_HOLD_W = false;
 
+    @SwitchProperty({
+        name: "Set Yaw and Rotation every tick",
+        description: "Will set Pitch and Yaw",
+        subcategory: "S Shaped Coord Settings",
+        category: "S Shaped Macro",
+    })
+
+    S_SET_EVERY_TICK = false;
+
     @TextProperty({
         name: "Pitch",
         description: "What direction will the macro be facing when farming?",

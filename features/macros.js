@@ -93,8 +93,10 @@ register("tick", () => {
     // This is to turn off all defined macros, if you add any macro on your own add it to here, so it turns off in case you open a menu
 
     if(smacro){
-        Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
-        Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
+        if(SettingsNew.S_SET_EVERY_TICK == true){
+            Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
+            Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
+        }
     }
     if (Client.currentGui.get() !== null) {
         if (cobble) {
@@ -234,13 +236,12 @@ register("tick", () => {
             }
         }
         if (isReconnecting == false && randomshit == true) {
-            click = true
-            sneakBind.setState(false)
-            leftBind.setState(false);
-            rightBind.setState(true);
+            START_S_MACRO()
             Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90.0
             Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
             randomshit = false
+            sneakBind.setState(false)
+            lastTurnAround = new Date();
         }
     }
     if (click == true) {
@@ -285,14 +286,6 @@ register("tick", () => {
         }
         leftBind.setState(false)
     }
-
-    // S FARM FAILSAFES
-    if(!isInIsland() && smacro == true){
-        if(reboot){ return;}
-        START_S_MACRO()
-    }
-
-
 })
 
 
@@ -356,71 +349,7 @@ function KILL_S_MACRO(){
 register("chat", function(event) {
     var msgString = ChatLib.removeFormatting(ChatLib.getChatMessage(event))
     if(msgString.startsWith(`[Important] This server will`) && smacro == true){
-        KILL_S_MACRO()
-        reboot = true
-        ChatLib.chat(`${prefix} &fDetected &cServer Reboot&f... Forcing S Shaped as &c&lOFF&f!\n&7Attempting to warp client back to island in 90 Seconds`)
-        setTimeout(() => {
-            ChatLib.say(`/warp home`)
-        }, 120000);
-        setTimeout(() => {
-            sneakBind.setState(true)
-            setTimeout(() => {
-                sneakBind.setState(false)
-            }, 1000);
-            START_S_MACRO()
-        }, 140000);
-    }
-    // FAIL SAFE SERVER WARPING
-    if(msgString.includes(`"map":"Hub"` && reboot !== true) && smacro == true){
-        KILL_S_MACRO()
-        ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to &aPrivate Island &fin &c120 Seconds&f!`)
-        setTimeout(() => {
-            ChatLib.say(`/warp home`)
-        }, 120000);
-        setTimeout(() => {
-            sneakBind.setState(true)
-            setTimeout(() => {
-                sneakBind.setState(false)
-            }, 1000);
-            START_S_MACRO()
-        }, 140000);
-    }
-    if(SettingsNew.S_FARM_AUTO_ON){
-        if(msgString.includes(`"gametype":"MAIN"`) || msgString.includes(`"gametype":"PROTOTYPE"`)){
-            ReconnectMode = true
-            ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to gamemode &bSkyblock&f.`)
-            ChatLib.command(`play sb`)
-        }
-    }
-    if(msgString.includes(`"map":"Hub"`) && ReconnectMode == true){
-        KILL_S_MACRO()
-        ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to &aPrivate Island&f.`)
-        setTimeout(() => {
-            ChatLib.command(`warp home`)
-        }, 60000);
-    }
-    if(ReconnectMode == true){
-        if(msgString.includes(`"map":"Private Island"`)){
-            ChatLib.chat(`${prefix} &7[FAILSAFE] &fDetected client joining &aPrivate Island&f.`)
-            setTimeout(() => {
-                ChatLib.chat(`${prefix} &cForcing S Shaped Macro to state &a&lON&c due to Auto Reconnect`)
-                smacro = true
-                ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
-                postWebhook(`Forcing client S Shaped to state **ON** due to a reconnect sequence`)
-                Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
-                Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
-                click = true
-                sneakBind.setState(true)
-                setTimeout(() => {
-                    sneakBind.setState(false)
-                }, 1000);
-                START_S_MACRO()
-                if(SettingsNew.S_SHAPED_HOLD_W){
-                    forwardBind.setState(true)
-                }
-                ReconnectMode = false
-            }, 5000);
-        }
+        ChatLib.command("hub");
     }
 }),
 
@@ -432,7 +361,7 @@ register('worldLoad', () => {
             ReconnectMode = true
             ChatLib.command(`play sb`)
             setTimeout(() => {
-                
+
             }, 2000);
             if(isInHub()){
                 ChatLib.chat(`${prefix} &4&lDEBUGGER: &7Detected player in Hub with setting &cS Shaped Auto Start&7 as &a&lON&7!\n&7Attempting to warp player to PRIVATE ISLAND`)
@@ -442,21 +371,11 @@ register('worldLoad', () => {
     }
     if (smacro == true && SettingsNew.MAIN_S_PING_TOGGLE){
         postWebhook("S Macro detected a world change.")
-        smacro = false
-        click = false
-        rightBind.setState(false)
-        leftBind.setState(false)
-        forwardBind.setState(false)
-        backwardBind.setState(false)
+
     }
     if (smacro == true) {
-        smacro = false
-        click = false
-        rightBind.setState(false)
-        leftBind.setState(false)
-        forwardBind.setState(false)
-        backwardBind.setState(false)
-
+        KILL_S_MACRO()
+        ChatLib.chat(`${prefix} &7Detected player in Hub with setting &cS Shaped Auto Start&7 as &a&lON&7!\n&7Attempting to warp player to PRIVATE ISLAND`)
         isReconnecting = true;
 
         setTimeout(() => {
@@ -464,38 +383,30 @@ register('worldLoad', () => {
                 ChatLib.command("is");
                 ChatLib.chat("§aReconnecting to Island from Hub...");
                 postWebhook(`Detected World Change: Correcting player position from **HUB** to **PLAYER ISLAND**`)
-                if (!Player.getPlayer().isOnGround()) {
-                    sneakBind.setState(true)
-                }
+                sneakBind.setState(true)
                 setTimeout(() => {
                     smacro = true
                     randomshit = true
                     isReconnecting = false;
-                }, 5500)
+                }, 6500)
             } else if (isInLobby()) {
                 if(SettingsNew.S_FARM_AUTO_ON){
-
                 }
                 ChatLib.command("play sb");
                 ChatLib.chat("§aReconnecting to SkyBlock from Lobby...");
                 postWebhook(`Detected World Change: Correcting player position from **LOBBY** to **GAMEMODE: SKYBLOCK**`)
-                if (!Player.getPlayer().isOnGround()) {
-                    sneakBind.setState(true)
-                }
+                sneakBind.setState(true)
                 setTimeout(() => {
                     smacro = true
                     randomshit = true
                     isReconnecting = false;
-                }, 5500)
+                }, 6500)
             } else if (isInLimbo()) {
                 ChatLib.command("lobby");
                 ChatLib.chat("§aReconnecting to Lobby from Limbo...");
                 postWebhook(`Detected World Change: Correcting player position from **LIMBO** to **LOBBY**`)
-            } else if(isInIsland){
-
             }
-
-        }, 4500)
+        }, 6000)
     }
 });
 export{prefix}
