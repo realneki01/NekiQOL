@@ -286,6 +286,12 @@ register("tick", () => {
         leftBind.setState(false)
     }
 
+    // S FARM FAILSAFES
+    if(!isInIsland() && smacro == true){
+        if(reboot){ return;}
+        START_S_MACRO()
+    }
+
 
 })
 
@@ -324,6 +330,10 @@ const isInLimbo = () => {
 
 let ReconnectMode;
 function START_S_MACRO(){
+    if(!isInIsland()){
+        postWebhook(`**ERROR** Attempted to start up **S Shaped** but was aborted due to client not being on **PRIVATE ISLAND**`)
+        return ChatLib.chat(`${prefix} &c&lERROR:&f Attempted to auto start up macro but detected client not on &aPrivate Island&f... Aborting macro startup`)
+    }
     smacro = true
     ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
     Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
