@@ -39,17 +39,26 @@ class Settings {
         name: "Render Profits GUI",
         description: "Show Profits on screen?",
         category: "NekoQOL Main",
-        subcategory: "Rendering"
+        subcategory: "Rendering",
     })
 
     MAIN_RENDER_GUI = false;
+
+    @SwitchProperty({
+        name: "Reset Profits on macro restart",
+        description: "Resets profits when enabling macro, instead of on restart",
+        category: "NekoQOL Main",
+        subcategory: "Rendering",
+    })
+
+    MAIN_RESET_PROFIT = false;
 
     @ButtonProperty({
         name: "Move Display",
         description: "Click to change the location where the counter is rendered",
         category: "NekoQOL Main",
         placeholder: "Move",
-        subcategory: "Rendering"
+        subcategory: "Rendering",
     })
     action() {
         Client.currentGui.close()

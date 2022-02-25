@@ -33,6 +33,8 @@ let bronze = 0
 let silver = 0
 let gold = 0
 
+let firstStart = 0;
+
 function postWebhook(data) {
     data = getPingWebhook(data)
     request({
@@ -175,20 +177,40 @@ register("tick", () => {
         if (smacro == false) {
             smacro = true
             ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
-            sessionProfits = 0
-            gold = 0
-            silver = 0
-            bronze = 0
-            Player
-            ?.getInventory()
-            ?.getItems()
-            ?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID())) 
-            ?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
-            ?.forEach(item => {
-                const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
-                if (!nbtData.get('mined_crops')) return;
-                sessionCounter = nbtData.getInteger('mined_crops');
-            });
+            if(firstStart == 0){
+                sessionProfits = 0
+                gold = 0
+                silver = 0
+                bronze = 0
+                Player
+                    ?.getInventory()
+                    ?.getItems()
+                    ?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID()))
+                    ?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
+                    ?.forEach(item => {
+                        const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
+                        if (!nbtData.get('mined_crops')) return;
+                        sessionCounter = nbtData.getInteger('mined_crops');
+                    });
+                firstStart = 1
+            }
+            if(SettingsNew.MAIN_RESET_PROFIT){
+                sessionProfits = 0
+                gold = 0
+                silver = 0
+                bronze = 0
+                Player
+                    ?.getInventory()
+                    ?.getItems()
+                    ?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID()))
+                    ?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
+                    ?.forEach(item => {
+                        const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
+                        if (!nbtData.get('mined_crops')) return;
+                        sessionCounter = nbtData.getInteger('mined_crops');
+                    });
+            }
+
             Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
             Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
             click = true
@@ -479,23 +501,23 @@ const localeString = (number, separator) => {
 };
 
 register('step', () => {
-	let kills;
+    let kills;
+    if(smacro){
+        Player
+            ?.getInventory()
+            ?.getItems()
+            ?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID()))
+            ?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
+            ?.forEach(item => {
+                const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
+                if (!nbtData.get('mined_crops')) return;
+                kills = nbtData.getInteger('mined_crops');
+            });
+    }
+    let separator = ","
 
-	Player
-		?.getInventory()
-		?.getItems()
-		?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID())) 
-		?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
-		?.forEach(item => {
-			const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
-			if (!nbtData.get('mined_crops')) return;
-			kills = nbtData.getInteger('mined_crops');
-		});
-
-	let separator = ","
-	
     trackerDisplay.setLine(1, new DisplayLine(`&8[&b&lNeko&7&lQOL &fGUI&8]`).setShadow(true))
-	trackerDisplay.setLine(3, new DisplayLine(`&9* &b&lCounter &7- &f${isNaN(kills) ? '-/-' : kills < killsPerLevel[maxLevel] ? localeString(kills, separator) + '/' + localeString(getNextKillCount(kills), separator) : localeString(kills, separator)+ ' (Maxed)'}`).setShadow(true));
+    trackerDisplay.setLine(3, new DisplayLine(`&9* &b&lCounter &7- &f${isNaN(kills) ? '-/-' : kills < killsPerLevel[maxLevel] ? localeString(kills, separator) + '/' + localeString(getNextKillCount(kills), separator) : localeString(kills, separator)+ ' (Maxed)'}`).setShadow(true));
     trackerDisplay.setLine(4, new DisplayLine(`&9* &b&lProfit Type &7- &cNether Wart`).setShadow(true))
     let profit = kills - sessionCounter
     profit = profit * 2
