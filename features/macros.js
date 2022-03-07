@@ -23,6 +23,7 @@ let cane = false;
 let cobble = false;
 let smacro = false;
 let lastTurnAround = new Date();
+let lobbyCheckTimer = new Date();
 let isReconnecting = false
 let randomshit = false
 let lastdir = 1
@@ -68,6 +69,16 @@ register(`command`, (...args) => {
         ChatLib.chat(`Attempting to set the state of S MACRO`)
         SMacroBind.setState(true)
     }
+    if(args == "randomshit") {
+        if(randomshit){
+            ChatLib.chat(`${prefix} &cSetting variable randomshit to &4&lFALSE`)
+            randomshit = false
+        }
+        if(!randomshit){
+            ChatLib.chat(`${prefix} &cSetting variable randomshit to &a&lTRUE`)
+            randomshit = true
+        }
+    }
     if(args == ""){
         ChatLib.chat(ChatLib.getChatBreak(`&b====================================================`))
         ChatLib.chat(ChatLib.getCenteredText(`&b&lNeko&7&lQOL &7DEV COMMANDS`))
@@ -92,6 +103,7 @@ register(`command`, (...args) => {
     }
 }).setName(`nekoqoldev`)
 let ReconnectMode;
+let date;
 
 register("tick", () => {
     lastY = getBlock
@@ -99,8 +111,13 @@ register("tick", () => {
     const item = Player.getHeldItem();
     getBlockZ = Math.round(Player.getZ())
     getBlockX = Math.round(Player.getX())
-    if(ReconnectMode && isInLobby()){
+    if(randomshit && isInLobby()){
         if(Player.getName() == "_vak"){ ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)}
+        if(date >= Date.now()){
+            ChatLib.command(`play sb`)
+            ChatLib.chat(`${prefix} &cFAILSAFE:&f Attempting to warp player back into skyblock`)
+            date = Date.now() + 1000
+        }
     }
     // This is to turn off all defined macros, if you add any macro on your own add it to here, so it turns off in case you open a menu
 
@@ -575,7 +592,7 @@ register('worldLoad', () => {
                     }
                     ChatLib.command("play sb");
                     ChatLib.chat("§aReconnecting to SkyBlock from Lobby...");
-                    postWebhook(`Detected World Change: Correcting player position from **LOBBY** to **GAMEMODE: SKYBLOCK**`)
+                    postWebhook(`Detected World Change: Attempting to correct player position from **LOBBY** to **GAMEMODE: SKYBLOCK**`)
                     sneakBind.setState(true)
                     setTimeout(() => {
                         smacro = true
