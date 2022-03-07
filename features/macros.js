@@ -89,6 +89,7 @@ register(`command`, (...args) => {
         }
     }
 }).setName(`nekoqoldev`)
+let ReconnectMode;
 
 register("tick", () => {
     lastY = getBlock
@@ -96,6 +97,9 @@ register("tick", () => {
     const item = Player.getHeldItem();
     getBlockZ = Math.round(Player.getZ())
     getBlockX = Math.round(Player.getX())
+    if(ReconnectMode && isInLobby()){
+        if(Player.getName() == "_vak"){ ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)}
+    }
     // This is to turn off all defined macros, if you add any macro on your own add it to here, so it turns off in case you open a menu
 
     if(smacro){
@@ -349,7 +353,6 @@ const isInLimbo = () => {
     return false;
 }
 
-let ReconnectMode;
 function START_S_MACRO(){
     if(!isInIsland()){
         postWebhook(`**ERROR** Attempted to start up **S Shaped** but was aborted due to client not being on **PRIVATE ISLAND**`)
@@ -588,6 +591,9 @@ register("chat", function(event) {
 
 register('worldLoad', () => {
     // AUTO RECONNECT SYSTEM
+    if(isInLobby()){
+        ChatLib.chat(`&c&lNEKOQOL DEBUGGER:&f Detected player in LOBBY`)
+    }
     if(SettingsNew.S_FARM_AUTO_ON && smacro){
         if(isInLobby()){
             ChatLib.chat(`${prefix} &4&lDEBUGGER: &7Detected player in Lobby with setting &cS Shaped Auto Start&7 as &a&lON&7!\n&7Attempting to warp player to gamemode SKYBLOCK`)

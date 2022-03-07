@@ -120,6 +120,10 @@ register(`command`, (...args) => {
             ChatLib.chat(`${prefix} &aAFK Pings&f have been toggled &c&lOFF&f!`)
         }
     }
+    if(args == "sbDebug"){
+        let score = Scoreboard.getLines()
+        ChatLib.chat(`${score.toString()}`)
+    }
     if(args[0] === "filter"){
         var test = args.slice(2).join(' ');
         test = test.toLowerCase()
