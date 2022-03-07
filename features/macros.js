@@ -334,10 +334,6 @@ register("tick", () => {
     }
 
     // S FARM FAILSAFES
-    if(!isInIsland() && smacro == true){
-        if(reboot){ return;}
-        START_S_MACRO()
-    }
 
 
 })
