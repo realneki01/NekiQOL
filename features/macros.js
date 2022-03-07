@@ -33,6 +33,8 @@ let bronze = 0
 let silver = 0
 let gold = 0
 
+let firstStart = 0;
+
 function postWebhook(data) {
     data = getPingWebhook(data)
     request({
@@ -179,20 +181,40 @@ register("tick", () => {
         if (smacro == false) {
             smacro = true
             ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
-            sessionProfits = 0
-            gold = 0
-            silver = 0
-            bronze = 0
-            Player
-            ?.getInventory()
-            ?.getItems()
-            ?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID())) 
-            ?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
-            ?.forEach(item => {
-                const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
-                if (!nbtData.get('mined_crops')) return;
-                sessionCounter = nbtData.getInteger('mined_crops');
-            });
+            if(firstStart == 0){
+                sessionProfits = 0
+                gold = 0
+                silver = 0
+                bronze = 0
+                Player
+                    ?.getInventory()
+                    ?.getItems()
+                    ?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID()))
+                    ?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
+                    ?.forEach(item => {
+                        const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
+                        if (!nbtData.get('mined_crops')) return;
+                        sessionCounter = nbtData.getInteger('mined_crops');
+                    });
+                firstStart = 1
+            }
+            if(SettingsNew.MAIN_RESET_PROFIT){
+                sessionProfits = 0
+                gold = 0
+                silver = 0
+                bronze = 0
+                Player
+                    ?.getInventory()
+                    ?.getItems()
+                    ?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID()))
+                    ?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
+                    ?.forEach(item => {
+                        const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
+                        if (!nbtData.get('mined_crops')) return;
+                        sessionCounter = nbtData.getInteger('mined_crops');
+                    });
+            }
+
             Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
             Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
             click = true
@@ -482,23 +504,23 @@ const localeString = (number, separator) => {
 };
 
 register('step', () => {
-	let kills;
+    let kills;
+    if(smacro){
+        Player
+            ?.getInventory()
+            ?.getItems()
+            ?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID()))
+            ?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
+            ?.forEach(item => {
+                const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
+                if (!nbtData.get('mined_crops')) return;
+                kills = nbtData.getInteger('mined_crops');
+            });
+    }
+    let separator = ","
 
-	Player
-		?.getInventory()
-		?.getItems()
-		?.filter(item => [290, 291, 292, 293, 271, 275, 258, 286, 279].includes(item?.getID())) 
-		?.reverse() // to get farmed from hoe that is closest to hotbar slot 1
-		?.forEach(item => {
-			const nbtData = item.getItemNBT().getCompoundTag('tag').getCompoundTag('ExtraAttributes');
-			if (!nbtData.get('mined_crops')) return;
-			kills = nbtData.getInteger('mined_crops');
-		});
-
-	let separator = ","
-	
     trackerDisplay.setLine(1, new DisplayLine(`&8[&b&lNeko&7&lQOL &fGUI&8]`).setShadow(true))
-	trackerDisplay.setLine(3, new DisplayLine(`&9* &b&lCounter &7- &f${isNaN(kills) ? '-/-' : kills < killsPerLevel[maxLevel] ? localeString(kills, separator) + '/' + localeString(getNextKillCount(kills), separator) : localeString(kills, separator)+ ' (Maxed)'}`).setShadow(true));
+    trackerDisplay.setLine(3, new DisplayLine(`&9* &b&lCounter &7- &f${isNaN(kills) ? '-/-' : kills < killsPerLevel[maxLevel] ? localeString(kills, separator) + '/' + localeString(getNextKillCount(kills), separator) : localeString(kills, separator)+ ' (Maxed)'}`).setShadow(true));
     trackerDisplay.setLine(4, new DisplayLine(`&9* &b&lProfit Type &7- &cNether Wart`).setShadow(true))
     let profit = kills - sessionCounter
     profit = profit * 2
@@ -510,82 +532,7 @@ register('step', () => {
 register("chat", function(event) {
     var msgString = ChatLib.removeFormatting(ChatLib.getChatMessage(event))
     if(msgString.startsWith(`[Important] This server will`) && smacro == true){
-        KILL_S_MACRO()
-        reboot = true
-        ChatLib.chat(`${prefix} &fDetected &cServer Reboot&f... Forcing S Shaped as &c&lOFF&f!\n&7Attempting to warp client back to island in 90 Seconds`)
-        setTimeout(() => {
-            ChatLib.say(`/warp home`)
-        }, 120000);
-        setTimeout(() => {
-            sneakBind.setState(true)
-            setTimeout(() => {
-                sneakBind.setState(false)
-            }, 1000);
-            START_S_MACRO()
-        }, 140000);
-    }
-    // FAIL SAFE SERVER WARPING
-    if(SettingsNew.MAIN_RENDER_GUI){
-        if(msgString.startsWith(`[NPC] Jacob: You earned a BRONZE`)){
-            bronze = bronze + 1
-        }
-        if(msgString.startsWith(`[NPC] Jacob: You earned a SILVER`)){
-            silver = silver + 1
-        }
-        if(msgString.startsWith(`[NPC] Jacob: You earned a GOLD`)){
-            gold = gold + 1
-        }
-    }
-    if(msgString.includes(`"map":"Hub"` && reboot !== true) && smacro == true){
-        KILL_S_MACRO()
-        ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to &aPrivate Island &fin &c120 Seconds&f!`)
-        setTimeout(() => {
-            ChatLib.say(`/warp home`)
-        }, 120000);
-        setTimeout(() => {
-            sneakBind.setState(true)
-            setTimeout(() => {
-                sneakBind.setState(false)
-            }, 1000);
-            START_S_MACRO()
-        }, 140000);
-    }
-    if(SettingsNew.S_FARM_AUTO_ON){
-        if(msgString.includes(`"gametype":"MAIN"`) || msgString.includes(`"gametype":"PROTOTYPE"`)){
-            ReconnectMode = true
-            ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to gamemode &bSkyblock&f.`)
-            ChatLib.command(`play sb`)
-        }
-    }
-    if(msgString.includes(`"map":"Hub"`) && ReconnectMode == true){
-        KILL_S_MACRO()
-        ChatLib.chat(`${prefix} &7[FAILSAFE] &fAttempting to warp client to &aPrivate Island&f.`)
-        setTimeout(() => {
-            ChatLib.command(`warp home`)
-        }, 60000);
-    }
-    if(ReconnectMode == true){
-        if(msgString.includes(`"map":"Private Island"`)){
-            ChatLib.chat(`${prefix} &7[FAILSAFE] &fDetected client joining &aPrivate Island&f.`)
-            setTimeout(() => {
-                ChatLib.chat(`${prefix} &cForcing S Shaped Macro to state &a&lON&c due to Auto Reconnect`)
-                smacro = true
-                ChatLib.chat(`${prefix} &aS Shaped Macro&f has been toggled &a&lON&f!`)
-                postWebhook(`Forcing client S Shaped to state **ON** due to a reconnect sequence`)
-                Player.getPlayer().field_70177_z = SettingsNew.S_SHAPED_COORDS_PITCH || 90
-                Player.getPlayer().field_70125_A = SettingsNew.S_SHAPED_COORDS_YAW || 0.0
-                click = true
-                sneakBind.setState(true)
-                setTimeout(() => {
-                    sneakBind.setState(false)
-                }, 1000);
-                START_S_MACRO()
-                if(SettingsNew.S_SHAPED_HOLD_W){
-                    forwardBind.setState(true)
-                }
-                ReconnectMode = false
-            }, 5000);
-        }
+        ChatLib.command("hub");
     }
 }),
 
@@ -607,64 +554,44 @@ register('worldLoad', () => {
                 ChatLib.command(`warp home`)
             }
         }
-    }
-    if (smacro == true && SettingsNew.MAIN_S_PING_TOGGLE){
-        postWebhook("S Macro detected a world change.")
-        smacro = false
-        click = false
-        rightBind.setState(false)
-        leftBind.setState(false)
-        forwardBind.setState(false)
-        backwardBind.setState(false)
-    }
-    if (smacro == true) {
-        smacro = false
-        click = false
-        rightBind.setState(false)
-        leftBind.setState(false)
-        forwardBind.setState(false)
-        backwardBind.setState(false)
+        if (smacro == true && SettingsNew.MAIN_S_PING_TOGGLE){
+            postWebhook("S Macro detected a world change.")
 
-        isReconnecting = true;
+        }
+        if (smacro == true) {
+            KILL_S_MACRO()
+            ChatLib.chat(`${prefix} &7Detected player in Hub with setting &cS Shaped Auto Start&7 as &a&lON&7!\n&7Attempting to warp player to PRIVATE ISLAND`)
+            isReconnecting = true;
 
-        setTimeout(() => {
-            if (isInHub()) {
-                ChatLib.command("is");
-                ChatLib.chat("§aReconnecting to Island from Hub...");
-                postWebhook(`Detected World Change: Correcting player position from **HUB** to **PLAYER ISLAND**`)
-                if (!Player.getPlayer().isOnGround()) {
+            setTimeout(() => {
+                if (isInHub()) {
+                    ChatLib.command("is");
+                    ChatLib.chat("§aReconnecting to Island from Hub...");
+                    postWebhook(`Detected World Change: Correcting player position from **HUB** to **PLAYER ISLAND**`)
                     sneakBind.setState(true)
-                }
-                setTimeout(() => {
-                    smacro = true
-                    randomshit = true
-                    isReconnecting = false;
-                }, 5500)
-            } else if (isInLobby()) {
-                if(SettingsNew.S_FARM_AUTO_ON){
-
-                }
-
-                ChatLib.command("play sb");
-                ChatLib.chat("§aReconnecting to SkyBlock from Lobby...");
-                postWebhook(`Detected World Change: Correcting player position from **LOBBY** to **GAMEMODE: SKYBLOCK**`)
-                if (!Player.getPlayer().isOnGround()) {
+                    setTimeout(() => {
+                        smacro = true
+                        randomshit = true
+                        isReconnecting = false;
+                    }, 6500)
+                } else if (isInLobby()) {
+                    if(SettingsNew.S_FARM_AUTO_ON){
+                    }
+                    ChatLib.command("play sb");
+                    ChatLib.chat("§aReconnecting to SkyBlock from Lobby...");
+                    postWebhook(`Detected World Change: Correcting player position from **LOBBY** to **GAMEMODE: SKYBLOCK**`)
                     sneakBind.setState(true)
+                    setTimeout(() => {
+                        smacro = true
+                        randomshit = true
+                        isReconnecting = false;
+                    }, 6500)
+                } else if (isInLimbo()) {
+                    ChatLib.command("lobby");
+                    ChatLib.chat("§aReconnecting to Lobby from Limbo...");
+                    postWebhook(`Detected World Change: Correcting player position from **LIMBO** to **LOBBY**`)
                 }
-                setTimeout(() => {
-                    smacro = true
-                    randomshit = true
-                    isReconnecting = false;
-                }, 5500)
-            } else if (isInLimbo()) {
-                ChatLib.command("lobby");
-                ChatLib.chat("§aReconnecting to Lobby from Limbo...");
-                postWebhook(`Detected World Change: Correcting player position from **LIMBO** to **LOBBY**`)
-            } else if(isInIsland){
-
-            }
-
-        }, 4500)
-    }
-});
+            }, 6000)
+        }
+    });
 export{prefix, moveGui}
