@@ -118,7 +118,13 @@ register("tick", () => {
     getBlockZ = Math.round(Player.getZ())
     getBlockX = Math.round(Player.getX())
     if(isReconnecting && isInLobby()){
-        if(Player.getName() == "_Vak"){ ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)}
+        if(Player.getName() == "_Vak"){ 
+            ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)
+            ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)
+            ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)
+            ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)
+            ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)
+        }
         if (new Date().getTime() - failSafeCD.getTime() < 2000) return;
         failSafeCD = new Date();
         ChatLib.chat(`${prefix} &cFailsafe: &fAttempting to transfer client to skyblock...`)
