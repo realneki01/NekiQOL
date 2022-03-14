@@ -77,11 +77,11 @@ register(`command`, (...args) => {
         }
     }
     if(args == "testlimbo"){
-        if(isInLimbo()){
-            ChatLib.chat(`Detected user in limbo`)
-            isReconnecting = true
+        if(isReconnecting){
+            ChatLib.chat(`${prefix} &cDEBUGGER: &fTesting variable "isReconnecting".. forcing as &c&lFALSE`)
+            isReconnecting = false
         } else {
-            ChatLib.chat(`Did not`)
+            ChatLib.chat(`${prefix} &cDEBUGGER: &fTesting variable "isReconnecting".. forcing as &a&lTRUE`)
             isReconnecting = true
         }
     }
@@ -121,6 +121,9 @@ register("tick", () => {
         if (new Date().getTime() - failSafeCD.getTime() < 2000) return;
         failSafeCD = new Date();
         ChatLib.chat(`${prefix} &cFailsafe: &fAttempting to transfer client to skyblock...`)
+        if(SettingsNew.MAIN_WEBHOOK_TOGGLE){
+            postWebhook(`**FAILSAFE:** Attempting to yeet **${Player.getName()}** back into skyblock`)
+        }
         ChatLib.command(`play sb`)
     }
     if(isReconnecting && isInLimbo()){
@@ -128,15 +131,21 @@ register("tick", () => {
         if (new Date().getTime() - failSafeCD.getTime() < 2000) return;
         failSafeCD = new Date();
         ChatLib.chat(`${prefix} &cFailsafe: &fAttempting to transfer client to hypixel...`)
+        if(SettingsNew.MAIN_WEBHOOK_TOGGLE){
+            postWebhook(`**FAILSAFE:** Attempting to transfer **${Player.getName()}** out of limbo before the gay hits`)
+        }
         ChatLib.command(`lobby`)
     }
     if(isReconnecting && isInHub()){
-        
+        ChatLib.chat(`${prefix} &cYour stupid ass is in hub, woopie... want a cookie?? dumb fuck`)
     }
     if(isReconnecting && isInIsland()){
         if (new Date().getTime() - failSafeCD.getTime() < 2000) return;
         failSafeCD = new Date();
         ChatLib.chat(`${prefix} &cFailsafe: &fAttempting to start up &aS Shaped`)
+        if(SettingsNew.MAIN_WEBHOOK_TOGGLE){
+            postWebhook(`**FAILSAFE:** Attempting to start up **S Shaped** macro due to a reconnect sequence`)
+        }
         isReconnecting = false
         START_S_MACRO()
     }
