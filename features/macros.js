@@ -24,6 +24,7 @@ let cobble = false;
 let smacro = false;
 let lastTurnAround = new Date();
 let failSafeCD = new Date();
+let webhookCD = new Date();
 let isReconnecting = false
 let randomshit = false
 let lastdir = 1
@@ -636,6 +637,11 @@ register("chat", function(event) {
 
 register('worldLoad', () => {
     // AUTO RECONNECT SYSTEM
+    if(SettingsNew.MAIN_WEBHOOK_TOGGLE){
+        if (new Date().getTime() - webhookCD.getTime() < 1000) return;
+        webhookCD = new Date();
+        postWebhook(`**WORLD CHANGE:** Some cute nekos detected you going places :eyes:`)
+    }
     if(SettingsNew.S_FARM_AUTO_ON && smacro){
         if(isInLobby()){
             ChatLib.chat(`${prefix} &4&lDEBUGGER: &7Detected player in Lobby with setting &cS Shaped Auto Start&7 as &a&lON&7!\n&7Attempting to warp player to gamemode SKYBLOCK`)
