@@ -97,6 +97,11 @@ register(`command`, (...args) => {
     }
     if(args == "config"){
         SettingsNew.openGUI()
+}
+    if(args == "setTabName"){
+        let names = TabList.getUnformattedNames()
+        ChatLib.chat(JSON.stringify(TabList.getUnformattedNames()))
+        TabList.
     }
     if(args == "afk"){
         if (afk == false){
