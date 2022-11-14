@@ -98,11 +98,6 @@ register(`command`, (...args) => {
     if(args == "config"){
         SettingsNew.openGUI()
 }
-    if(args == "setTabName"){
-        let names = TabList.getUnformattedNames()
-        ChatLib.chat(JSON.stringify(TabList.getUnformattedNames()))
-        TabList.
-    }
     if(args == "afk"){
         if (afk == false){
             afk = true
@@ -123,13 +118,6 @@ register("tick", () => {
     getBlockZ = Math.round(Player.getZ())
     getBlockX = Math.round(Player.getX())
     if(isReconnecting && isInLobby()){
-        if(Player.getName() == "_Vak"){ 
-            ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)
-            ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)
-            ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)
-            ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)
-            ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)
-        }
         if (new Date().getTime() - failSafeCD.getTime() < 2000) return;
         failSafeCD = new Date();
         ChatLib.chat(`${prefix} &cFailsafe: &fAttempting to transfer client to skyblock...`)
@@ -139,7 +127,6 @@ register("tick", () => {
         ChatLib.command(`play sb`)
     }
     if(isReconnecting && isInLimbo()){
-        if(Player.getName() == "_Vak"){ ChatLib.chat(`${prefix} &b&lNYAA!&f I'm spamming your chat because you wanted this!`)}
         if (new Date().getTime() - failSafeCD.getTime() < 2000) return;
         failSafeCD = new Date();
         ChatLib.chat(`${prefix} &cFailsafe: &fAttempting to transfer client to hypixel...`)
@@ -355,21 +342,43 @@ register("tick", () => {
     }
     // Cane macro settings, change the getBlockZ == "num" to whatever coordinates that are in the cane farm's edges (the outside barrier coordinates)
     // If your cane farm is oriented in X direction, might need to edit this a bit, if you can't figure it out dm me on discord @Azael#0315
-    if (getBlockZ == "80" && cane) {
-        if (new Date().getTime() - lastTurnAround.getTime() < 1000) return;
-        lastTurnAround = new Date();
-        backwardBind.setState(false)
-        rightBind.setState(false)
-        leftBind.setState(true)
-    }
-    if (getBlockZ == "-83" && cane) {
-        if (new Date().getTime() - lastTurnAround.getTime() < 1000) return;
-        lastTurnAround = new Date();
-        backwardBind.setState(true)
-        if (getBlockZ == "-74") {
-            rightBind.setState(true)
+    if (!SettingsNew.INVERT_DIRECTION) {
+        if (getBlockZ == `${SettingsNew.CANE_COORDS_Z_1}` && cane) {
+            if (new Date().getTime() - lastTurnAround.getTime() < 1000) return;
+            lastTurnAround = new Date();
+            backwardBind.setState(false)
+            rightBind.setState(false)
+            leftBind.setState(true)
         }
-        leftBind.setState(false)
+        if (getBlockZ == `${SettingsNew.CANE_COORDS_Z_2}` && cane) {
+            if (new Date().getTime() - lastTurnAround.getTime() < 1000) return;
+            lastTurnAround = new Date();
+            backwardBind.setState(true)
+            let newBlock = parseInt(SettingsNew.CANE_COORDS_Z_2) - 3
+            if (getBlockZ == `${newBlock}`) {
+                rightBind.setState(true)
+            }
+            leftBind.setState(false)
+        }
+    }
+    else if (SettingsNew.INVERT_DIRECTION) {
+        if (getBlockX == `${SettingsNew.CANE_COORDS_Z_1}` && cane) {
+            if (new Date().getTime() - lastTurnAround.getTime() < 1000) return;
+            lastTurnAround = new Date();
+            backwardBind.setState(false)
+            rightBind.setState(false)
+            leftBind.setState(true)
+        }
+        if (getBlockX == `${SettingsNew.CANE_COORDS_Z_2}` && cane) {
+            if (new Date().getTime() - lastTurnAround.getTime() < 1000) return;
+            lastTurnAround = new Date();
+            backwardBind.setState(true)
+            let newBlock = parseInt(SettingsNew.CANE_COORDS_Z_2) - 3
+            if (getBlockX == `${newBlock}`) {
+                rightBind.setState(true)
+            }
+            leftBind.setState(false)
+        }
     }
 
     // S FARM FAILSAFES
