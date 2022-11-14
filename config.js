@@ -29,7 +29,7 @@ class Settings {
     // MY FILTER
     @SwitchProperty({
         name: "Neko Mode",
-        description: "Turns Weebchan replies into a catgirl! &dNYAA!",
+        description: "Turns NekoQOL replies into a catgirl! &dNYAA!",
         category: "NekoQOL Main",
         subcategory: "Fun",
     })
@@ -218,18 +218,26 @@ class Settings {
     MAIN_CANE_PING_TOGGLE = false;
 
     // CANE MACRO SETTINGS
+    @SwitchProperty({
+        name: "Inverted Direction",
+        description: "OFF = Z Direction, ON = X Direction",
+        category: "Cane Macro",
+    })
+    INVERT_DIRECTION = false;
 
     @TextProperty({
-        name: "Z Coords #1",
-        description: "if you dont know what coords are... why",
+        name: "Coords #1",
+        description: "Put Positive X or Z coordinate here",
         category: "Cane Macro",
+        subcategory: "Inverted Direction"
     })
     CANE_COORDS_Z_1 = ""
 
     @TextProperty({
-        name: "Z Coords #2",
-        description: "if you dont know what coords are... why",
+        name: "Coords #2",
+        description: "Put Negative X or Z coordinate here",
         category: "Cane Macro",
+        subcategory: "Inverted Direction"
     })
     CANE_COORDS_Z_2 = ""
 
