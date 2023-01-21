@@ -20,6 +20,7 @@ const JCheckBox = Java.type("java.swing.JCheckBox");
 const Font = Java.type("java.awt.Font");
 let afk = false
 let afktime = new Date();
+let joinTime = new Date();
 
 var key = new PogObject("NekoQOL", {
     keywords: [],
@@ -231,9 +232,36 @@ register(`command`, (...args) => {
     }
 }).setName(`nekoqol`)
 
+let shouldJoinSb = true
+
+function sendtoSB() {
+    if (shouldJoinSb) {
+        if (SettingsNew.AUTO_SB) {
+            if (new Date().getTime() - joinTime.getTime() < 1000) return;
+            joinTime = new Date();
+            setTimeout(()=>{
+                ChatLib.say('/skyblock')
+            }, 50)
+            shouldJoinSb = false
+        }
+    }
+}
+
+register("tick", () => {
+    if(ChatLib.removeFormatting(Scoreboard.getTitle()).includes("HYPIXEL") || ChatLib.removeFormatting(Scoreboard.getTitle()).includes("PROTOTYPE") || ChatLib.removeFormatting(Scoreboard.getTitle()).includes("BED WARS")|| ChatLib.removeFormatting(Scoreboard.getTitle()).includes("SKYWARS")|| ChatLib.removeFormatting(Scoreboard.getTitle()).includes("MURDER MYSTERY")|| ChatLib.removeFormatting(Scoreboard.getTitle()).includes("HOUSING")|| ChatLib.removeFormatting(Scoreboard.getTitle()).includes("DUELS")) {
+        setTimeout(()=>
+        sendtoSB(), 
+        50)
+    }
+    if(ChatLib.removeFormatting(Scoreboard.getTitle()).includes("SKYBLOCK")) {
+        shouldJoinSb = true
+    }
+})
+
 register('worldLoad', () => {
     if (afk == true){
         if (new Date().getTime() - afktime.getTime() < 1000) return;
+        
         postWebhook("Island change noticed, you should go back to AFK")
     }
 })

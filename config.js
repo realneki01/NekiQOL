@@ -1,4 +1,4 @@
-import { @Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProperty, @DecimalSliderProperty, @SliderProperty, @CheckboxProperty, Color, @SelectorProperty } from 'Vigilance';
+import { @Vigilant, @TextProperty, @ColorProperty, @ButtonProperty, @SwitchProperty, @DecimalSliderProperty, @SliderProperty, @CheckboxProperty, Color, @SelectorProperty, @PercentSliderProperty } from 'Vigilance';
 @Vigilant('NekoQOL', 'NekoQOL Settings Menu', {
     getCategoryComparator: () => (a, b) => {
         const categories = ['NekoQOL Main', 'MyFilter', 'Webhook Settings', 'S Shaped Macro', `Cane Macro`];
@@ -34,6 +34,14 @@ class Settings {
         subcategory: "Fun",
     })
     FUN_NEKO_MODE = false;
+
+    @SwitchProperty({
+        name: "Auto Skyblock",
+        description: "Automatically joins skyblock when joining Hypixel",
+        category: "NekoQOL Main",
+        subcategory: "Fun",
+    })
+    AUTO_SB = false;
 
     @SwitchProperty({
         name: "Render Profits GUI",
@@ -268,16 +276,25 @@ class Settings {
     })
     S_SHAPED_COORDS_PITCH = ""
 
-    @TextProperty({
-        name: "Yaw",
-        description: "&c&lWARNING: &cSetting it past -90 to 90 will result in an instant watchdog ban!",
-        category: "S Shaped Macro",
-        subcategory: "S Shaped Coord Settings",
-        placeholder: "0.0"
+    // @TextProperty({
+    //     name: "Yaw",
+    //     description: "&c&lWARNING: &cSetting it past -90 to 90 will result in an instant watchdog ban!",
+    //     category: "S Shaped Macro",
+    //     subcategory: "S Shaped Coord Settings",
+    //     placeholder: "0.0",
+    //     SliderProperty: ""
+    // })
+    // S_SHAPED_COORDS_YAW = ""
+
+    @SliderProperty({
+        name: 'Yaw',
+        description: "&c&lAdjust Yaw",
+        category: 'S Shaped Macro',
+        subcategory: 'S Shaped Coord Settings',
+        min: -90,
+        max: 90
     })
-    S_SHAPED_COORDS_YAW = ""
-
-
+    S_SHAPED_COORDS_YAW = 0.0;
 
 
 }
