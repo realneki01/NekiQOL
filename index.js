@@ -18,7 +18,7 @@ const backwardBind = new KeyBind(mc.field_71474_y.field_74368_y);
 const leftBind = new KeyBind(mc.field_71474_y.field_74370_x);
 const rightBind = new KeyBind(mc.field_71474_y.field_74366_z);
 const sneakBind = new KeyBind(mc.field_71474_y.field_74311_E);
-let direction;
+let direction = "forwards";
 let num = 0;
 let Display = new Display();
 Display.setBackground("per line");
@@ -26,8 +26,11 @@ Display.setRenderLoc(800, 150);
 let meow = new Date();
 let egg = new Date();
 
-let MacroCoords1 = -143;
-let MacroCoords2 = 143;
+// let MacroCoords1 = -143;
+// let MacroCoords2 = 143;
+
+let MacroCoords1 = Settings.FIRST_COORD;
+let MacroCoords2 = Settings.SECOND_COORD;
 
 register("command", function() {
     Settings.openGUI();
@@ -169,15 +172,9 @@ register("tick", () => {
         }, 200);
         leftBind.setState(true);
         direction = "forwards";
-        sendDiscordMessage("going forwards uwu");
+        sendDiscordMessage("Going Forwards!");
     }
 
-    // if (direction == "forwards") {
-    //     sendDiscordMessage("going forwards uwu");
-    // }
-    // else if (direction == "backwards") {
-    //     sendDiscordMessage("going backwards uwu");
-    // }
 
     if (getBlockZ == MacroCoords2 && caneMacro) {   // if current coords equal the preset coords, go backwards
         if (new Date().getTime() - lastTurnAround.getTime() < 1000) return;
@@ -187,8 +184,7 @@ register("tick", () => {
         }, 200);
         backwardBind.setState(true);    // start S keypress
         direction = "backwards"
-        console.log("going backwards uwu");
-        sendDiscordMessage("going backwards uwu");
+        sendDiscordMessage("Going Backwards!");
     }
 });
 

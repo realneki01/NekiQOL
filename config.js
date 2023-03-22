@@ -19,6 +19,22 @@ class Settings {
     })
 
     MAIN_WEBHOOK_URL = ""
+
+    @TextProperty({
+        name: 'First Coord',
+        description: "&c&lFirst Macro Coordinate",
+        category: 'Macro',
+        subcategory: 'Macro Settings',
+    })
+    FIRST_COORD = -143;
+
+    @TextProperty({
+        name: 'Second Coord',
+        description: "&c&lSecond Macro Coordinate",
+        category: 'Macro',
+        subcategory: 'Macro Settings',
+    })
+    SECOND_COORD = 143;
 }
 export default new Settings;
 
