@@ -35,6 +35,22 @@ class Settings {
         subcategory: 'Macro Settings',
     })
     SECOND_COORD = 143;
+
+    @TextProperty({
+        name: 'Viewing Pitch Keybind',
+        description: "&c&lChange Pitch",
+        category: 'Macro',
+        subcategory: 'Viewing Angle',
+    })
+    VIEWING_PITCH = 45;
+
+    @TextProperty({
+        name: 'Viewing Yaw Keybind',
+        description: "&c&lChange Yaw",
+        category: 'Macro',
+        subcategory: 'Viewing Yaw',
+    })
+    VIEWING_PITCH = 0;
 }
 export default new Settings;
 

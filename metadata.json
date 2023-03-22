@@ -2,7 +2,7 @@
     "name": "NekiQOL",
     "description": "definetly not a macro thingy",
     "author": "Azael, Neki01",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "requires": ["PersistentData", "requestV2", "Vigilance", "PogData"],
     "entry": "index.js"
 }

@@ -93,8 +93,8 @@ register("tick", () => {
     );
 
     if (AnglekeyBind.isPressed()) {
-        Player.getPlayer().field_70177_z = 45 //PITCH
-        Player.getPlayer().field_70125_A = 0.0 //YAW
+        Player.getPlayer().field_70177_z = VIEWING_PITCH //PITCH
+        Player.getPlayer().field_70125_A = VIEWING_YAW //YAW
     }
 
     if (num == 1 && caneMacro) {
