@@ -26,7 +26,7 @@ class Settings {
         category: 'Macro',
         subcategory: 'Macro Settings',
     })
-    FIRST_COORD = -143;
+    FIRST_COORD = "-143";
 
     @TextProperty({
         name: 'Second Coord',
@@ -34,23 +34,23 @@ class Settings {
         category: 'Macro',
         subcategory: 'Macro Settings',
     })
-    SECOND_COORD = 143;
+    SECOND_COORD = "143";
 
     @TextProperty({
         name: 'Viewing Pitch Keybind',
-        description: "&c&lChange Pitch",
+        description: "Change Pitch",
         category: 'Macro',
-        subcategory: 'Viewing Angle',
+        subcategory: 'Viewing Angle'
     })
-    VIEWING_PITCH = 45;
+    VIEWING_PITCH = "45";
 
     @TextProperty({
         name: 'Viewing Yaw Keybind',
-        description: "&c&lChange Yaw",
+        description: "&c&lDON'T PUT OVER 90 OR BELOW -90 &rChange Yaw",
         category: 'Macro',
-        subcategory: 'Viewing Yaw',
+        subcategory: 'Viewing Angle'
     })
-    VIEWING_PITCH = 0;
+    VIEWING_YAW = "0";
 }
 export default new Settings;
 

@@ -5,7 +5,7 @@ import Settings from "./config";
 import { KeyLib } from "../KeyLib/index";
 const CaneMacrokeyBind = new KeyBind("Toggle Cane macro", Keyboard.KEY_NONE, "NekiQOL");
 const AnglekeyBind = new KeyBind("Look Farming Direction", Keyboard.KEY_NONE, "NekiQOL");
-const CollectorBind = new KeyBind("Auto Collect F Sack", Keyboard.KEY_NONE, "NekiQOL");
+// const CollectorBind = new KeyBind("Auto Collect F Sack", Keyboard.KEY_NONE, "NekiQOL");
 const sendClickBlockToController = Client.getMinecraft().getClass().getDeclaredMethod("func_147115_a", java.lang.Boolean.TYPE);
 sendClickBlockToController.setAccessible(true);
 let prefix = "&l&0[&5Neki&4QOL&0]"
@@ -23,7 +23,7 @@ let num = 0;
 let Display = new Display();
 Display.setBackground("per line");
 Display.setRenderLoc(800, 150);
-let meow = new Date();
+// let meow = new Date();
 let egg = new Date();
 
 // let MacroCoords1 = -143;
@@ -93,12 +93,11 @@ register("tick", () => {
     );
 
     if (AnglekeyBind.isPressed()) {
-        Player.getPlayer().field_70177_z = VIEWING_PITCH //PITCH
-        Player.getPlayer().field_70125_A = VIEWING_YAW //YAW
+        Player.getPlayer().field_70177_z = Settings.VIEWING_PITCH //PITCH
+        Player.getPlayer().field_70125_A = Settings.VIEWING_YAW //YAW
     }
 
     if (num == 1 && caneMacro) {
-        console.log("lol");
         num = 0;
         if (direction == "forwards") {
             leftBind.setState(true);
@@ -126,13 +125,13 @@ register("tick", () => {
     getBlockY = Math.round(Player.getY());
     getBlockZ = Math.round(Player.getZ());
 
-    if (CollectorBind.isPressed()) {
-        if (new Date().getTime() - meow.getTime() < 2000) return;
-        let prevSlot = Player.getHeldItemIndex();
-        Player.setHeldItemIndex(3);
-        KeyLib.rightClick();
-        Player.setHeldItemIndex(prevSlot);
-    }
+    // if (CollectorBind.isPressed()) {
+    //     if (new Date().getTime() - meow.getTime() < 2000) return;
+    //     let prevSlot = Player.getHeldItemIndex();
+    //     Player.setHeldItemIndex(3);
+    //     KeyLib.rightClick();
+    //     Player.setHeldItemIndex(prevSlot);
+    // }
 
     if (Player.getContainer().getName().includes("Enchanted Agronomy Sack")) {
         let itemlore = Player?.getOpenedInventory()?.getStackInSlot(25)?.getLore() || null 
