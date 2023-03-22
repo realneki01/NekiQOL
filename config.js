@@ -50,11 +50,7 @@ class Settings {
         category: 'Macro',
         subcategory: 'Viewing Angle'
     })
-<<<<<<< HEAD
     VIEWING_YAW = "0";
-=======
-    VIEWING_YAW = 0;
->>>>>>> refs/remotes/origin/main
 }
 export default new Settings;
 
