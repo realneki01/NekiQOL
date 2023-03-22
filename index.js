@@ -35,7 +35,6 @@ register("command", function() {
 
 function sendDiscordMessage(data) {
     let url = Settings.MAIN_WEBHOOK_URL;
-    console.log(url);
     let content = data
 
     request({
