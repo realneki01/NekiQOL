@@ -50,7 +50,7 @@ class Settings {
         category: 'Macro',
         subcategory: 'Viewing Yaw',
     })
-    VIEWING_PITCH = 0;
+    VIEWING_YAW = 0;
 }
 export default new Settings;
 
